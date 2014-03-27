@@ -1,0 +1,1 @@
+Bad config file!: Your file contains nothing!

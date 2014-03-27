@@ -1,0 +1,125 @@
+commit bb4c6ad7e9ecc9eff4ca09c6aed36f554692d401
+Author: Garrett Sickles <garrettsickles@gmail.com>
+Date:   Wed Mar 19 19:04:16 2014 -0600
+
+    Implemented passing tests for incorrect accusations
+
+commit a746511c74d0c5f2c9035f0ceb0f638c1cb8252d
+Author: Garrett Sickles <garrettsickles@gmail.com>
+Date:   Wed Mar 19 19:02:10 2014 -0600
+
+    Implemented passing test for correct accusation
+
+commit 8a6bf78b070afb0a865fe9e89d84b89728f8663a
+Author: Garrett Sickles <garrettsickles@gmail.com>
+Date:   Wed Mar 19 19:00:17 2014 -0600
+
+    Finished preparations to implement passing tests for accusations
+
+commit bbee1addb1de4a50a87e26b93ecba5d108fc8e01
+Author: Garrett Sickles <garrettsickles@gmail.com>
+Date:   Wed Mar 19 18:46:31 2014 -0600
+
+    Added test to verify correct card distribution
+
+commit 02190b07f6d17427d38a186b62a07d8f716d708f
+Author: Garrett Sickles <garrettsickles@gmail.com>
+Date:   Wed Mar 19 18:40:02 2014 -0600
+
+    Implement dealCards() so it now passes its tests
+
+commit cbe1c718414805333ba25d0c420ebed54c835988
+Author: Garrett Sickles <garrettsickles@gmail.com>
+Date:   Wed Mar 19 17:57:53 2014 -0600
+
+    Finished implementing failing test for dealing cards
+
+commit f676d58602e934ba0baab64d799a7c6502bcc800
+Author: Garrett Sickles <garrettsickles@gmail.com>
+Date:   Wed Mar 19 17:39:45 2014 -0600
+
+    Finished implementing loading adds and checking if the deck is complete
+
+commit 170609e2feed94512b65b45f01a0743e239fc80d
+Author: Garrett Sickles <garrettsickles@gmail.com>
+Date:   Wed Mar 19 17:10:14 2014 -0600
+
+    Finished implementing passing tests for loading players
+
+commit d38dd7217d4f13d438fb954fc9a9597343d69cdc
+Author: Garrett Sickles <garrettsickles@gmail.com>
+Date:   Wed Mar 19 16:09:37 2014 -0600
+
+    Finished writing all loading tests for players
+
+commit 1065be17af73c754f1830d2abe55882842e9aeb9
+Author: Garrett Sickles <garrettsickles@gmail.com>
+Date:   Wed Mar 19 15:33:39 2014 -0600
+
+    Implemented loading tests for characters and weapons, now passing
+
+commit d207a24b16e1f95cb1258d464d87dd8d28f9aecc
+Author: Garrett Sickles <garrettsickles@gmail.com>
+Date:   Wed Mar 19 14:34:30 2014 -0600
+
+    Added helper methods for loading configuration files
+
+commit 7cd65d2e32dfe5f3ea8970d3fdd477021124d57c
+Author: Garrett Sickles <garrettsickles@gmail.com>
+Date:   Tue Mar 18 21:56:47 2014 -0600
+
+    Added Color as an instance variable to Player
+
+commit 003703efc80470c654f8dd3164bc046e62d21184
+Author: Garrett Sickles <garrettsickles@gmail.com>
+Date:   Tue Mar 18 21:53:11 2014 -0600
+
+    I added test stubs to ClueGameTests
+
+commit c8e581d688de457bda827c02b591effa919192d4
+Author: Garrett Sickles <garrettsickles@gmail.com>
+Date:   Tue Mar 18 21:23:36 2014 -0600
+
+    All stub methods written, no tests written
+
+commit cbb819b39f326ffe18ab781b5907e4588d67358e
+Author: Garrett Frank Sickles <garrettsickles@gmail.com>
+Date:   Sat Mar 15 23:52:32 2014 -0500
+
+    Updating stubs for initial failing tests
+
+commit 32630b38dedeb905ca6192892a3169edc02d76ed
+Author: Garrett Frank Sickles <garrettsickles@gmail.com>
+Date:   Sat Mar 15 20:21:26 2014 -0500
+
+    Added data files for cards
+
+commit c4d426a0ce68d5a602d9bf586e9de7b8f094506a
+Author: Garrett Frank Sickles <garrettsickles@gmail.com>
+Date:   Fri Mar 14 01:53:37 2014 -0500
+
+    Initial commit including stub classes for CluePlayers assignment
+
+commit 44e8876bb676eb27ad26cd2bdda5ed100266a47e
+Author: Garrett Frank Sickles <garrettsickles@gmail.com>
+Date:   Fri Mar 14 01:48:05 2014 -0500
+
+    Initial refactoring
+
+commit 51b95f00bd1b9cdd4dca1b51dcab9b11c283352e
+Author: Garrett Frank Sickles <garrettsickles@gmail.com>
+Date:   Thu Mar 6 22:15:18 2014 -0700
+
+    Refactored the Clue Swap code into a new directory system for better orginization as the project grows
+
+commit bfe823653b4bea05fd0803a96e10c8f36b35912b
+Author: Garrett Frank Sickles <garrettsickles@gmail.com>
+Date:   Thu Mar 6 10:39:12 2014 -0700
+
+    Initial Commit with Swap Files
+
+commit 52549e2c018462f2894c37993e25e877a0171f30
+Author: Garrett Frank Sickles <garrettsickles@gmail.com>
+Date:   Thu Feb 27 15:55:58 2014 -0800
+
+    Initial commit
