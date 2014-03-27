@@ -12,8 +12,7 @@ public class BadConfigFormatException extends Exception {
 			pw.write("Bad config file!: " + reason);
 			pw.close();
 		} catch (FileNotFoundException e) {
-			System.out
-					.println("Well this is awkward... There was an error opening the file to write errors to!");
+			System.out.println("Well this is awkward... There was an error opening the file to write errors to!");
 		}
 	}
 }
