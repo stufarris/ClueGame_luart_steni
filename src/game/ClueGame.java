@@ -26,6 +26,8 @@ import game.player.HumanPlayer;
 import game.player.Player;
 
 public class ClueGame extends JPanel{
+
+	private static final long serialVersionUID = 7898999844979750592L;
 	private Set<Card> cards;
 	private Set<Card> weapons;
 	private Set<Card> rooms;
@@ -38,9 +40,14 @@ public class ClueGame extends JPanel{
 	private Solution solution;
 	private Board board;
 	
+	private static final int BOARD_DIMENSION = 500;
+	
+	private static final int HUMAN_START_ROW = 19;
+	private static final int HUMAN_START_COLUMN = 16;
+	
 	public ClueGame() {
-		this.setPreferredSize(new Dimension(500, 500));
-		this.setSize(new Dimension(500, 500));
+		this.setPreferredSize(new Dimension(BOARD_DIMENSION, BOARD_DIMENSION));
+		this.setSize(new Dimension(BOARD_DIMENSION, BOARD_DIMENSION));
 		this.setBorder(new TitledBorder (new EtchedBorder(), "Game Board"));
 		
 		cards = new HashSet<Card>();
@@ -59,7 +66,7 @@ public class ClueGame extends JPanel{
 			loadWeaponFile(weaponFilename);
 			loadCharacterFile(characterFilename);
 			loadPlayerFile(playerFilename);
-			humanPlayer = (new HumanPlayer("Human", Color.BLACK, 19, 16, this));
+			humanPlayer = (new HumanPlayer("Human", Color.BLACK, HUMAN_START_ROW, HUMAN_START_COLUMN, this));
 		} catch(BadConfigFormatException e) {
 			e.printStackTrace();
 		} catch (FileNotFoundException e) {
@@ -113,7 +120,13 @@ public class ClueGame extends JPanel{
 				
 		while((line  = input.readLine()) != null) {
 			String[] info = line.split(", *");
-			if(info[0] == null || info[1] == null || info[2] == null || info[3] == null || info.length != 4) throw new BadConfigFormatException("Layout Legend File Invalid.");
+			if(
+					info[0] == null || 
+					info[1] == null || 
+					info[2] == null || 
+					info[3] == null || 
+					info.length != 4) 
+				throw new BadConfigFormatException("Layout Legend File Invalid.");
 			Color color;
 			try {
 			    Field field = Color.class.getField(info[3]);
@@ -219,8 +232,6 @@ public class ClueGame extends JPanel{
 	public void paintComponent(Graphics g) {
 		int x = 5;
 		int y = 15;
-		int width = 25 * getBoard().getNumColumns();
-		int height = 25 * getBoard().getNumRows();
 		
 		super.paintComponent(g);
 		this.getBoard().drawBoard(x, y, g, this);
