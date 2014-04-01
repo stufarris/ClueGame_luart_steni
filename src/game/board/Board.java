@@ -27,27 +27,27 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 public class Board {
-	
+
 	private String csv;
 	private String legend;
-	
+
 	private ArrayList<BoardCell> cells;
 	private Map<Character, String> rooms;
 	private Map<Integer, ArrayList<Integer>> adjacencyLists;
 	private boolean[] visited;
 	private Set<BoardCell> targets;
-	
+
 	private int numRows;
 	private int numColumns;
-	
+
 	private static final int BOARD_CELL_WIDTH = 25;
 	private static final int BOARD_CELL_HEIGHT = 25;
-	
+
 	public Board() {
 		// default uses CR board and legend
 		this("ClueLayout.csv", "ClueLegend.txt");
 	}
-	
+
 	public Board(String csv, String legend) {
 		rooms = new HashMap<Character, String>();
 		cells = new ArrayList<BoardCell>();
@@ -277,11 +277,11 @@ public class Board {
 			return null;
 		}
 	}
-	
+
 	public ArrayList<BoardCell> getBoardCells() {
 		return cells;
 	}
-	
+
 	public int getNumRows() {
 		return numRows;
 	}
@@ -437,20 +437,20 @@ public class Board {
 					"Tried to calcIndex a location not on the board");
 		}
 	}
-	
+
 	public void drawBoard( int x_offset, int y_offset, Graphics g, JPanel jp) {
 		int width = BOARD_CELL_WIDTH * numColumns;
 		int height = BOARD_CELL_HEIGHT * numRows;
-		
+
 		jp.setPreferredSize(new Dimension(width + x_offset, height + y_offset));
-		
+
 		g.setColor(Color.YELLOW);
 		g.fillRect((width + x_offset) / 2 - width / 2, y_offset, width, height);
-		
+
 		for(BoardCell b : cells) {
 			b.draw(g, x_offset, y_offset, BOARD_CELL_WIDTH, BOARD_CELL_HEIGHT);
 		}
-		
+
 		g.setColor(Color.BLACK);
 		g.drawString("Conservatory", x_offset + 30, y_offset + 60);
 		g.drawString("Billiard Room", x_offset + 200, y_offset + 60);
@@ -461,6 +461,6 @@ public class Board {
 		g.drawString("Kitchen", x_offset + 50, y_offset + 470);
 		g.drawString("Dining Room", x_offset + 250, y_offset + 470);
 		g.drawString("Lounge", x_offset + 490, y_offset + 470);
-		
+
 	}
 }
