@@ -22,13 +22,14 @@ public class ControlFrame extends JFrame {
 	private JPanel uiPanel;
 	private JMenuBar menu;
 
-	private final int WIDTH = 590;
+	private static final int WINDOW_WIDTH = 590;
+	private static final int WINDOW_HEIGHT = 690;
 
 	public ControlFrame() {
 		game = new ClueGame();
 		game.loadConfigFiles("data/card/character/characters.txt", "data/card/weapon/weapons.txt", "data/Players.txt");
 		game.getPlayers();
-		this.setSize(new Dimension(WIDTH, 665));
+		this.setSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
 		this.setTitle("The Game of Clue");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout(new BorderLayout());

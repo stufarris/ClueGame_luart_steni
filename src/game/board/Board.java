@@ -40,8 +40,8 @@ public class Board {
 	private int numRows;
 	private int numColumns;
 	
-	private final int boardCellWidth = 25;
-	private final int boardCellHeight = 25;
+	private static final int BOARD_CELL_WIDTH = 25;
+	private static final int BOARD_CELL_HEIGHT = 25;
 	
 	public Board() {
 		// default uses CR board and legend
@@ -296,7 +296,7 @@ public class Board {
 			// exist
 
 			/*
-			 * Left. Locaitons on the left egde have locations that are
+			 * Left. Locations on the left edge have locations that are
 			 * multiples of the number of columns
 			 */
 			if (location % numColumns != 0)
@@ -433,8 +433,8 @@ public class Board {
 	}
 	
 	public void drawBoard( int x_offset, int y_offset, Graphics g, JPanel jp) {
-		int width = boardCellWidth * numColumns;
-		int height = boardCellHeight * numRows;
+		int width = BOARD_CELL_WIDTH * numColumns;
+		int height = BOARD_CELL_HEIGHT * numRows;
 		
 		jp.setPreferredSize(new Dimension(width + x_offset, height + y_offset));
 		
@@ -442,7 +442,7 @@ public class Board {
 		g.fillRect((width + x_offset) / 2 - width / 2, y_offset, width, height);
 		
 		for(BoardCell b : cells) {
-			b.draw(g, x_offset, y_offset, boardCellWidth, boardCellHeight);
+			b.draw(g, x_offset, y_offset, BOARD_CELL_WIDTH, BOARD_CELL_HEIGHT);
 		}
 		
 		g.setColor(Color.BLACK);
