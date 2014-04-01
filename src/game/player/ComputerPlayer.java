@@ -41,8 +41,8 @@ public class ComputerPlayer extends Player {
 	}
 
 	public String[] createSuggestion() {
-		String[] s = {getCharacters().get(new Random().nextInt(getCharacters().size())).getTitle(), getLastRoomVisited(),
-			getWeapons().get(new Random().nextInt(getWeapons().size())).getTitle()};
+		String[] s = {getSeenCharacters().get(new Random().nextInt(getSeenCharacters().size())).getTitle(), getLastRoomVisited(),
+			getSeenWeapons().get(new Random().nextInt(getSeenWeapons().size())).getTitle()};
 		
 		return s;
 

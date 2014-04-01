@@ -51,7 +51,7 @@ public class NotesDialog extends JFrame {
 			for(Card c : game.getCharacters()){
 				JCheckBox cb = new JCheckBox(c.getTitle());
 				cb.addActionListener(new PeopleListener());
-				if(game.getHumanPlayer().getCharacters().contains(c)) cb.setSelected(false);
+				if(game.getHumanPlayer().getSeenCharacters().contains(c)) cb.setSelected(false);
 				else cb.setSelected(true);
 				this.add(cb);
 			}
@@ -83,8 +83,8 @@ public class NotesDialog extends JFrame {
 
 		private void populateGuesses() {
 			comboBox.removeAllItems();
-			if(game.getHumanPlayer().getCharacters().isEmpty()) comboBox.addItem("Everyone Seen");
-			else for(Card c : game.getHumanPlayer().getCharacters()) comboBox.addItem(c.getTitle());
+			if(game.getHumanPlayer().getSeenCharacters().isEmpty()) comboBox.addItem("Everyone Seen");
+			else for(Card c : game.getHumanPlayer().getSeenCharacters()) comboBox.addItem(c.getTitle());
 		}
 
 		private class pGuessListener implements FocusListener {
@@ -109,7 +109,7 @@ public class NotesDialog extends JFrame {
 			for(Card c : game.getRooms()){
 				JCheckBox cb = new JCheckBox(c.getTitle());
 				cb.addActionListener(new RoomListener());
-				if(game.getHumanPlayer().getRooms().contains(c)) cb.setSelected(false);
+				if(game.getHumanPlayer().getSeenRooms().contains(c)) cb.setSelected(false);
 				else cb.setSelected(true);
 				this.add(cb);
 			}
@@ -141,8 +141,8 @@ public class NotesDialog extends JFrame {
 
 		public void populateGuesses() {
 			comboBox.removeAllItems();
-			if(game.getHumanPlayer().getRooms().isEmpty()) comboBox.addItem("All Rooms Seen");
-			else for(Card c : game.getHumanPlayer().getRooms()) comboBox.addItem(c.getTitle());
+			if(game.getHumanPlayer().getSeenRooms().isEmpty()) comboBox.addItem("All Rooms Seen");
+			else for(Card c : game.getHumanPlayer().getSeenRooms()) comboBox.addItem(c.getTitle());
 		}
 
 		private class rGuessListener implements FocusListener {
@@ -167,7 +167,7 @@ public class NotesDialog extends JFrame {
 			for(Card c : game.getWeapons()){
 				JCheckBox cb = new JCheckBox(c.getTitle());
 				cb.addActionListener(new WeaponListener());
-				if(game.getHumanPlayer().getWeapons().contains(c)) cb.setSelected(false);
+				if(game.getHumanPlayer().getSeenWeapons().contains(c)) cb.setSelected(false);
 				else cb.setSelected(true);
 				this.add(cb);
 			}
@@ -199,8 +199,8 @@ public class NotesDialog extends JFrame {
 
 		private void populateGuesses() {
 			comboBox.removeAllItems();
-			if(game.getHumanPlayer().getWeapons().isEmpty()) comboBox.addItem("All Weapons Seen");
-			else for(Card c : game.getHumanPlayer().getWeapons()) comboBox.addItem(c.getTitle());
+			if(game.getHumanPlayer().getSeenWeapons().isEmpty()) comboBox.addItem("All Weapons Seen");
+			else for(Card c : game.getHumanPlayer().getSeenWeapons()) comboBox.addItem(c.getTitle());
 		}
 
 		private class wGuessListener implements FocusListener {

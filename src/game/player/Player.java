@@ -67,6 +67,7 @@ public class Player {
 	
 	public void giveCard(Card c) {
 		handOfCards.add(c);
+		seeCard(c);
 	}
 	
 	public boolean hasCard(Card card) {
@@ -101,15 +102,15 @@ public class Player {
 		return column;
 	}
 	
-	public ArrayList<Card> getCharacters() {
+	public ArrayList<Card> getSeenCharacters() {
 		return seenCharacters;
 	}
 
-	public ArrayList<Card> getWeapons() {
+	public ArrayList<Card> getSeenWeapons() {
 		return seenWeapons;
 	}
 
-	public ArrayList<Card> getRooms() {
+	public ArrayList<Card> getSeenRooms() {
 		return seenRooms;
 	}
 	

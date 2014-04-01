@@ -146,11 +146,11 @@ public class GameActionTests {
 		for(Card c : game.getWeapons()) {
 			players.get(0).seeCard(c);
 		}
-		players.get(0).getWeapons().add(new ArrayList<Card>(game.getWeapons()).get(0));
+		players.get(0).getSeenWeapons().add(new ArrayList<Card>(game.getWeapons()).get(0));
 		for(Card c : game.getCharacters()) {
 			players.get(0).seeCard(c);
 		}
-		players.get(0).getCharacters().add(new ArrayList<Card>(game.getCharacters()).get(0));
+		players.get(0).getSeenCharacters().add(new ArrayList<Card>(game.getCharacters()).get(0));
 		
 		String[] sug = players.get(0).createSuggestion();
 		assertEquals(sug[0], new ArrayList<Card>(game.getCharacters()).get(0).getTitle());
@@ -166,13 +166,13 @@ public class GameActionTests {
 		for(Card c : game.getWeapons()) {
 			players.get(0).seeCard(c);
 		}
-		players.get(0).getWeapons().add(new ArrayList<Card>(game.getWeapons()).get(0));
-		players.get(0).getWeapons().add(new ArrayList<Card>(game.getWeapons()).get(1));
+		players.get(0).getSeenWeapons().add(new ArrayList<Card>(game.getWeapons()).get(0));
+		players.get(0).getSeenWeapons().add(new ArrayList<Card>(game.getWeapons()).get(1));
 		for(Card c : game.getCharacters()) {
 			players.get(0).seeCard(c);
 		}
-		players.get(0).getCharacters().add(new ArrayList<Card>(game.getCharacters()).get(0));
-		players.get(0).getCharacters().add(new ArrayList<Card>(game.getCharacters()).get(1));
+		players.get(0).getSeenCharacters().add(new ArrayList<Card>(game.getCharacters()).get(0));
+		players.get(0).getSeenCharacters().add(new ArrayList<Card>(game.getCharacters()).get(1));
 
 		int g1 = 0;
 		int g2 = 0;
