@@ -24,16 +24,6 @@ public class Solution {
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((person == null) ? 0 : person.hashCode());
-		result = prime * result + ((room == null) ? 0 : room.hashCode());
-		result = prime * result + ((weapon == null) ? 0 : weapon.hashCode());
-		return result;
-	}
-
-	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;

@@ -45,6 +45,8 @@ public class ClueGame extends JPanel{
 	private static final int HUMAN_START_ROW = 19;
 	private static final int HUMAN_START_COLUMN = 16;
 	private static final int PLAYER_DIMENSION = 25;
+	private static final int X_OFFSET = 5;
+	private static final int Y_OFFSET = 15;
 	
 	public ClueGame() {
 		this.setPreferredSize(new Dimension(BOARD_DIMENSION, BOARD_DIMENSION));
@@ -231,15 +233,13 @@ public class ClueGame extends JPanel{
 	
 	@Override
 	public void paintComponent(Graphics g) {
-		int x = 5;
-		int y = 15;
-		
+
 		super.paintComponent(g);
-		this.getBoard().drawBoard(x, y, g, this);
+		this.getBoard().drawBoard(X_OFFSET, Y_OFFSET, g, this);
 		
 		g.setColor(Color.BLACK);
 		for(Player p : players){
-			p.draw(g, x, y, PLAYER_DIMENSION, PLAYER_DIMENSION);
+			p.draw(g, X_OFFSET, Y_OFFSET, PLAYER_DIMENSION, PLAYER_DIMENSION);
 		}
 	}
 }
