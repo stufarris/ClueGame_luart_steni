@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class ControlFrame extends JFrame {
@@ -46,6 +47,10 @@ public class ControlFrame extends JFrame {
 		menu = new JMenuBar();
 		this.setJMenuBar(menu);
 		menu.add(createFileMenu());
+		
+		//splash screen
+		JOptionPane.showMessageDialog(null, "You are " + game.getHumanPlayer().getName() + ", press Next Player to begin play!");
+
 	}
 
 	private JMenu createFileMenu()
