@@ -40,7 +40,7 @@ public class ClueGame extends JPanel{
 	private Solution solution;
 	private Board board;
 	
-	private static final int BOARD_DIMENSION = 500;
+	private static final int BOARD_DIMENSION = 650;
 	
 	private static final int HUMAN_START_ROW = 19;
 	private static final int HUMAN_START_COLUMN = 16;
