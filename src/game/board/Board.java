@@ -432,29 +432,29 @@ public class Board {
 		}
 	}
 	
-	public void drawBoard( int x, int y, Graphics g, JPanel jp) {
+	public void drawBoard( int x_offset, int y_offset, Graphics g, JPanel jp) {
 		int width = boardCellWidth * numColumns;
 		int height = boardCellHeight * numRows;
 		
-		jp.setPreferredSize(new Dimension(width + x, height + y));
+		jp.setPreferredSize(new Dimension(width + x_offset, height + y_offset));
 		
 		g.setColor(Color.YELLOW);
-		g.fillRect((width + x) / 2 - width / 2, y, width, height);
+		g.fillRect((width + x_offset) / 2 - width / 2, y_offset, width, height);
 		
 		for(BoardCell b : cells) {
-			b.draw(g, x, y, boardCellWidth, boardCellHeight);
+			b.draw(g, x_offset, y_offset, boardCellWidth, boardCellHeight);
 		}
 		
 		g.setColor(Color.BLACK);
-		g.drawString("Conservatory", x + 30, y + 60);
-		g.drawString("Billiard Room", x + 200, y + 60);
-		g.drawString("Library", x + 370, y + 60);
-		g.drawString("Study", x + 520, y + 60);
-		g.drawString("Ballroom", x + 70, y + 260);
-		g.drawString("Hall", x + 490, y + 260);
-		g.drawString("Kitchen", x + 50, y + 470);
-		g.drawString("Dining Room", x + 250, y + 470);
-		g.drawString("Lounge", x + 490, y + 470);
+		g.drawString("Conservatory", x_offset + 30, y_offset + 60);
+		g.drawString("Billiard Room", x_offset + 200, y_offset + 60);
+		g.drawString("Library", x_offset + 370, y_offset + 60);
+		g.drawString("Study", x_offset + 520, y_offset + 60);
+		g.drawString("Ballroom", x_offset + 70, y_offset + 260);
+		g.drawString("Hall", x_offset + 490, y_offset + 260);
+		g.drawString("Kitchen", x_offset + 50, y_offset + 470);
+		g.drawString("Dining Room", x_offset + 250, y_offset + 470);
+		g.drawString("Lounge", x_offset + 490, y_offset + 470);
 		
 	}
 }
