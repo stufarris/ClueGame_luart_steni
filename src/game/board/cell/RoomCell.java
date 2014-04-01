@@ -2,8 +2,16 @@ package game.board.cell;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Map;
 
 public class RoomCell extends BoardCell {
+	
+	private DoorDirection doorDirection;
+	private char letter;
+	private boolean printsLabel;
+	private String roomName;
+	
+	
 	public enum DoorDirection {
 		UP, DOWN, LEFT, RIGHT, NONE
 	};
@@ -16,9 +24,13 @@ public class RoomCell extends BoardCell {
 		this.letter = letter;
 		doorDirection = dir;
 	}
-
-	private DoorDirection doorDirection;
-	private char letter;
+	
+	public RoomCell(char letter, DoorDirection dir, boolean printsLabel, Map<Character, String> room) {
+		this.letter = letter;
+		doorDirection = dir;
+		this.printsLabel = printsLabel;
+		this.roomName = room.get(letter);
+	}
 
 	public char getInitial() {
 		return letter;
@@ -55,7 +67,13 @@ public class RoomCell extends BoardCell {
 			case RIGHT:
 				g.fillRect(x + (width * this.column) + (width * 4) / 5, y + height * this.row, width / 5, height);
 				break;
+			default:
+				break;
 			}
+		}
+		if (printsLabel) {
+			g.setColor(Color.BLACK);
+			g.drawString(roomName, x + width * this.column, y + height * this.row);
 		}
 	}
 

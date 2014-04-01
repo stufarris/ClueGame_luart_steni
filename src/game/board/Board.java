@@ -181,10 +181,11 @@ public class Board {
 										DoorDirection.UP));
 								continue;
 							}
-							// special case because provided board has an
-							// Inconsistent door specifier
+							// special case to draw label
 							case ('N'): {
-								break;
+								cells.add(new RoomCell(cell.charAt(0),
+										DoorDirection.NONE, true, rooms));
+								continue;
 							}
 							case ('L'): {
 								cells.add(new RoomCell(cell.charAt(0),
@@ -450,17 +451,6 @@ public class Board {
 		for(BoardCell b : cells) {
 			b.draw(g, x_offset, y_offset, BOARD_CELL_WIDTH, BOARD_CELL_HEIGHT);
 		}
-
-		g.setColor(Color.BLACK);
-		g.drawString("Conservatory", x_offset + 30, y_offset + 60);
-		g.drawString("Billiard Room", x_offset + 200, y_offset + 60);
-		g.drawString("Library", x_offset + 370, y_offset + 60);
-		g.drawString("Study", x_offset + 520, y_offset + 60);
-		g.drawString("Ballroom", x_offset + 70, y_offset + 260);
-		g.drawString("Hall", x_offset + 490, y_offset + 260);
-		g.drawString("Kitchen", x_offset + 50, y_offset + 470);
-		g.drawString("Dining Room", x_offset + 250, y_offset + 470);
-		g.drawString("Lounge", x_offset + 490, y_offset + 470);
 
 	}
 }
