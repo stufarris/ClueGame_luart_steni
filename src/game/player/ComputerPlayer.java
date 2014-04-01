@@ -15,17 +15,17 @@ public class ComputerPlayer extends Player {
 	
 	public ComputerPlayer(){
 		super();
-		this.characters = new ArrayList<Card>();
-		this.weapons = new ArrayList<Card>();
-		this.rooms = new ArrayList<Card>();
+		this.seenCharacters = new ArrayList<Card>();
+		this.seenWeapons = new ArrayList<Card>();
+		this.seenRooms = new ArrayList<Card>();
 	}
 	
 	public ComputerPlayer(String id, Color color, int row, int column, ClueGame game) {
 		super(id, color, row, column);
 		this.game = game;
-		this.characters = new ArrayList<Card>(game.getCharacters());
-		this.weapons = new ArrayList<Card>(game.getWeapons());
-		this.rooms = new ArrayList<Card>(game.getRooms());
+		this.seenCharacters = new ArrayList<Card>(game.getCharacters());
+		this.seenWeapons = new ArrayList<Card>(game.getWeapons());
+		this.seenRooms = new ArrayList<Card>(game.getRooms());
 	}
 	
 	public BoardCell pickLocation(Set<BoardCell> targets) {

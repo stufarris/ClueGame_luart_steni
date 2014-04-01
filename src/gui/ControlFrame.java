@@ -8,10 +8,12 @@ import gui.panel.TurnPanel;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -20,7 +22,7 @@ import javax.swing.JPanel;
 
 public class ControlFrame extends JFrame {
 	private static ClueGame game;
-	private JPanel uiPanel;
+	private JPanel uiPanel, cardsPanel;
 	private JMenuBar menu;
 
 	private static final int WINDOW_WIDTH = 590;
@@ -30,6 +32,7 @@ public class ControlFrame extends JFrame {
 		game = new ClueGame();
 		game.loadConfigFiles("data/card/character/characters.txt", "data/card/weapon/weapons.txt", "data/Players.txt");
 		game.getPlayers();
+		game.dealCards();
 		this.setSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
 		this.setTitle("The Game of Clue");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -40,6 +43,10 @@ public class ControlFrame extends JFrame {
 		uiPanel.setSize(new Dimension(800, 30));
 		uiPanel.add(new TurnPanel(), BorderLayout.WEST);
 		uiPanel.add(new PlayerActionPanel(), BorderLayout.EAST);
+		
+		cardsPanel = new JPanel();
+		cardsPanel.setLayout(new GridLayout(0, 1));
+		cardsPanel.setSize(new Dimension(50, 400));
 
 		this.add(new DisplayPanel(), BorderLayout.SOUTH);
 		this.add(uiPanel, BorderLayout.NORTH);

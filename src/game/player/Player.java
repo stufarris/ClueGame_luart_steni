@@ -12,18 +12,18 @@ import game.card.Card;
 public class Player {
 	private String id = "";
 	private Color color;
-	private Set<Card> cards;
+	private Set<Card> handOfCards;
 
 	private int row;
 	private int column;
 	protected String lastRoomVisited = "\0";
 	
-	protected ArrayList<Card> characters;
-	protected ArrayList<Card> weapons;
-	protected ArrayList<Card> rooms;
+	protected ArrayList<Card> seenCharacters;
+	protected ArrayList<Card> seenWeapons;
+	protected ArrayList<Card> seenRooms;
 	
 	public Player(){
-		this.cards = new HashSet<Card>();
+		this.handOfCards = new HashSet<Card>();
 	}
 	
 	public Player(String id, Color color, int row, int column) {
@@ -31,7 +31,7 @@ public class Player {
 		this.color = color;
 		this.row = row;
 		this.column = column;
-		this.cards = new HashSet<Card>();
+		this.handOfCards = new HashSet<Card>();
 	}
 	
 	public Card disproveSuggestion(String character, String room, String weapon) {
@@ -39,22 +39,22 @@ public class Player {
 		Card r = new Card(room, Card.CardType.ROOM);
 		Card w = new Card(weapon, Card.CardType.WEAPON);
 		ArrayList<Card> buffer = new ArrayList<Card>();
-		if(cards.contains(p)) buffer.add(p);
-		if(cards.contains(r)) buffer.add(r);
-		if(cards.contains(w)) buffer.add(w);
+		if(handOfCards.contains(p)) buffer.add(p);
+		if(handOfCards.contains(r)) buffer.add(r);
+		if(handOfCards.contains(w)) buffer.add(w);
 		return buffer.get(new Random().nextInt(buffer.size()));
 	}
 	
 	public void seeCard(Card c) {
-		if(c.getType() == Card.CardType.PERSON) characters.remove(c);
-		else if(c.getType() == Card.CardType.WEAPON) weapons.remove(c);
-		else if(c.getType() == Card.CardType.ROOM) rooms.remove(c);
+		if(c.getType() == Card.CardType.PERSON) seenCharacters.remove(c);
+		else if(c.getType() == Card.CardType.WEAPON) seenWeapons.remove(c);
+		else if(c.getType() == Card.CardType.ROOM) seenRooms.remove(c);
 	}
 	
 	public void forgetCard(Card c) {
-		if(c.getType() == Card.CardType.PERSON && !characters.contains(c)) characters.add(c);
-		else if(c.getType() == Card.CardType.WEAPON && !weapons.contains(c)) weapons.add(c);
-		else if(c.getType() == Card.CardType.ROOM && !rooms.contains(c)) rooms.add(c);
+		if(c.getType() == Card.CardType.PERSON && !seenCharacters.contains(c)) seenCharacters.add(c);
+		else if(c.getType() == Card.CardType.WEAPON && !seenWeapons.contains(c)) seenWeapons.add(c);
+		else if(c.getType() == Card.CardType.ROOM && !seenRooms.contains(c)) seenRooms.add(c);
 	}
 	
 	public String getLastRoomVisited() {
@@ -66,15 +66,15 @@ public class Player {
 	}
 	
 	public void giveCard(Card c) {
-		cards.add(c);
+		handOfCards.add(c);
 	}
 	
 	public boolean hasCard(Card card) {
-		return cards.contains(card);
+		return handOfCards.contains(card);
 	}
 	
 	public Set<Card> getCards() {
-		return cards;
+		return handOfCards;
 	}
 	
 	public String getName() {
@@ -102,15 +102,15 @@ public class Player {
 	}
 	
 	public ArrayList<Card> getCharacters() {
-		return characters;
+		return seenCharacters;
 	}
 
 	public ArrayList<Card> getWeapons() {
-		return weapons;
+		return seenWeapons;
 	}
 
 	public ArrayList<Card> getRooms() {
-		return rooms;
+		return seenRooms;
 	}
 	
 	public void draw(Graphics g, int x, int y, int width, int height){
