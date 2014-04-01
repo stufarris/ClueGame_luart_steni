@@ -26,7 +26,7 @@ public class RoomCell extends BoardCell {
 
 	@Override
 	public boolean isRoom() {
-		return !isDoorway();
+		return true; // Was !isDoorway(), but didn't make sense to me
 	}
 
 	@Override

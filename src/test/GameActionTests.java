@@ -11,6 +11,7 @@ import game.card.Card;
 import game.player.ComputerPlayer;
 import game.player.Player;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -18,8 +19,8 @@ public class GameActionTests {
 	
 	private static ClueGame game;
 
-	@BeforeClass
-	public static void setUp() {
+	@Before
+	public void setUp() {
 		game = new ClueGame();
 		game.loadConfigFiles("data/card/character/characters.txt", "data/card/weapon/weapons.txt", "data/Players.txt");
 		game.dealCards();
@@ -133,6 +134,7 @@ public class GameActionTests {
 		
 		// Tests that players are queried in a certain order
 		assertTrue(null == game.handleSuggestion("gunner", "gunroom", "gun", players.get(0)));
+		
 	}
 	
 	@Test

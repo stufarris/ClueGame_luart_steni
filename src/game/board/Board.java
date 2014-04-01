@@ -182,12 +182,8 @@ public class Board {
 								continue;
 							}
 							// special case because provided board has an
-							// inconsistant door specifier
-							case ('N'): {/*
-										 * cells.add(new
-										 * RoomCell(cell.charAt(0),
-										 * DoorDirection.UP)); continue;
-										 */
+							// Inconsistent door specifier
+							case ('N'): {
 								break;
 							}
 							case ('L'): {
@@ -265,11 +261,21 @@ public class Board {
 	}
 
 	public RoomCell getRoomCellAt(int row, int column) {
-		return (RoomCell) getCellAt(row, column);
+		if (getCellAt(row, column).isRoom()) {
+			return (RoomCell) getCellAt(row, column);
+		}
+		else {
+			return null;
+		}
 	}
 
 	public RoomCell getRoomCellAt(int location) {
-		return (RoomCell) getCellAt(location);
+		if (getCellAt(location).isRoom()) {
+			return (RoomCell) getCellAt(location);
+		}
+		else {
+			return null;
+		}
 	}
 	
 	public ArrayList<BoardCell> getBoardCells() {
