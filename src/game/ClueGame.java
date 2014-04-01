@@ -44,6 +44,7 @@ public class ClueGame extends JPanel{
 	
 	private static final int HUMAN_START_ROW = 19;
 	private static final int HUMAN_START_COLUMN = 16;
+	private static final int PLAYER_DIMENSION = 25;
 	
 	public ClueGame() {
 		this.setPreferredSize(new Dimension(BOARD_DIMENSION, BOARD_DIMENSION));
@@ -238,7 +239,7 @@ public class ClueGame extends JPanel{
 		
 		g.setColor(Color.BLACK);
 		for(Player p : players){
-			p.draw(g, x, y, 25, 25);
+			p.draw(g, x, y, PLAYER_DIMENSION, PLAYER_DIMENSION);
 		}
 	}
 }
