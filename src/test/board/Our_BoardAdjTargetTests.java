@@ -9,7 +9,7 @@ import game.board.cell.BoardCell;
 import game.board.cell.RoomCell;
 
 import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.Set;
 
 import org.junit.Assert;
@@ -29,7 +29,7 @@ public class Our_BoardAdjTargetTests {
 
 	@Test
 	public void testWalkwayLocations() {
-		LinkedList<Integer> list = board.getAdjList(board.calcIndex(0, 7));
+		ArrayList<Integer> list = board.getAdjList(board.calcIndex(0, 7));
 		boolean[] test = new boolean[list.size()];
 		for (int i = 0; i < list.size(); i++) {
 			test[i] = board.getCellAt(list.get(i)).isWalkway();
@@ -41,7 +41,7 @@ public class Our_BoardAdjTargetTests {
 
 	@Test
 	public void testEdgeLeft() {
-		LinkedList<Integer> list = board.getAdjList(board.calcIndex(6, 0));
+		ArrayList<Integer> list = board.getAdjList(board.calcIndex(6, 0));
 		Assert.assertEquals(list.size(), 2);
 		list = board.getAdjList(board.calcIndex(8, 0));
 		Assert.assertEquals(list.size(), 3);
@@ -51,7 +51,7 @@ public class Our_BoardAdjTargetTests {
 
 	@Test
 	public void testEdgeRight() {
-		LinkedList<Integer> list = board.getAdjList(board.calcIndex(3, 25));
+		ArrayList<Integer> list = board.getAdjList(board.calcIndex(3, 25));
 		Assert.assertEquals(list.size(), 2);
 		list = board.getAdjList(board.calcIndex(5, 25));
 		Assert.assertEquals(list.size(), 3);
@@ -61,7 +61,7 @@ public class Our_BoardAdjTargetTests {
 
 	@Test
 	public void testEdgeUp() {
-		LinkedList<Integer> list = board.getAdjList(board.calcIndex(0, 6));
+		ArrayList<Integer> list = board.getAdjList(board.calcIndex(0, 6));
 		Assert.assertEquals(list.size(), 2);
 		list = board.getAdjList(board.calcIndex(0, 7));
 		Assert.assertEquals(list.size(), 3);
@@ -71,7 +71,7 @@ public class Our_BoardAdjTargetTests {
 
 	@Test
 	public void testEdgeDown() {
-		LinkedList<Integer> list = board.getAdjList(board.calcIndex(25, 5));
+		ArrayList<Integer> list = board.getAdjList(board.calcIndex(25, 5));
 		Assert.assertEquals(list.size(), 2);
 		list = board.getAdjList(board.calcIndex(25, 9));
 		Assert.assertEquals(list.size(), 3);
@@ -81,7 +81,7 @@ public class Our_BoardAdjTargetTests {
 
 	@Test
 	public void testBesideRoomLocationsWalkways() {
-		LinkedList<Integer> list = board.getAdjList(board.calcIndex(6, 0));
+		ArrayList<Integer> list = board.getAdjList(board.calcIndex(6, 0));
 		boolean[] test = new boolean[list.size()];
 		for (int i = 0; i < list.size(); i++) {
 			test[i] = board.getCellAt(list.get(i)).isRoom();
@@ -101,7 +101,7 @@ public class Our_BoardAdjTargetTests {
 
 	@Test
 	public void testBesideRoomLocationsRooms() {
-		LinkedList<Integer> list = board.getAdjList(board.calcIndex(11, 3));
+		ArrayList<Integer> list = board.getAdjList(board.calcIndex(11, 3));
 		boolean[] test = new boolean[list.size()];
 		for (int i = 0; i < list.size(); i++) {
 			test[i] = board.getCellAt(list.get(i)).isRoom();

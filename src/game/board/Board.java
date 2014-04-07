@@ -33,7 +33,7 @@ public class Board {
 
 	private ArrayList<BoardCell> cells;
 	private Map<Character, String> rooms;
-	private Map<Integer, ArrayList<Integer>> adjacencyLists;
+	private Map<Integer, ArrayList<Integer>> adjacencyMatrix;
 	private boolean[] visited;
 	private Set<BoardCell> targets;
 
@@ -52,7 +52,7 @@ public class Board {
 		rooms = new HashMap<Character, String>();
 		cells = new ArrayList<BoardCell>();
 		targets = new HashSet<BoardCell>();
-		adjacencyLists = new HashMap<Integer, ArrayList<Integer>>();
+		adjacencyMatrix = new HashMap<Integer, ArrayList<Integer>>();
 		this.csv = csv;
 		this.legend = legend;
 		numRows = 0;
@@ -296,94 +296,75 @@ public class Board {
 	}
 
 	public void calcAdjacencies() {
-		// Generate adjacency lists for all board locations
-		for (int location = 0; location < numRows * numColumns; ++location) {
-			ArrayList<Integer> list = new ArrayList<Integer>();
-			// for a given location, check all adjacent cells, provided they
-			// exist
-
-			/*
-			 * Left. Locations on the left edge have locations that are
-			 * multiples of the number of columns
-			 */
-			if (location % numColumns != 0)
-				list.add(location - 1);
-			// Right. Locations on the right edge are locations (n*columns)-1
-			if ((location + 1) % numColumns != 0)
-				list.add(location + 1);
-			// Top
-			if (location - numColumns >= 0)
-				list.add(location - numColumns);
-			// Bottom
-			if (location + numColumns <= calcIndex(numRows - 1, numColumns - 1))
-				list.add(location + numColumns);
-			adjacencyLists.put(location, list);
-		}
-	}
-
-	// Takes the precalculated adjacency list and prunes out any we don't want
-	// to pass
-	public ArrayList<Integer> getValidAdjacencies(int location) {
-		ArrayList<Integer> newList = new ArrayList<Integer>();
-		newList.addAll(adjacencyLists.get(location));
-		for (Iterator<Integer> it = newList.iterator(); it.hasNext();) {
-			int i = it.next();
-			// Do not allow pathing through rooms
-			if (getCellAt(i).isRoom() && !getCellAt(i).isDoorway()
-					|| getCellAt(location).isRoom()) {
-				it.remove();
-				continue;
-			}
-			// Do not allow pathing into a door from another door (double doors)
-			if (getCellAt(i).isDoorway()) {
-				if (getCellAt(location).isDoorway()) {
-					it.remove();
-					continue;
+		adjacencyMatrix = new HashMap<Integer, ArrayList<Integer>>();
+		for (int row = 0; row < numRows; row++) {
+			for (int column = 0; column < numColumns; column++) {
+				int index = calcIndex(row, column);
+				adjacencyMatrix.put(index, new ArrayList<Integer>());
+				// Check if it is a room without a door, if it is, can't have any adjacencies
+				// Check if doorway
+				if (!cells.get(calcIndex(row,column)).isRoom() ||
+					(cells.get(calcIndex(row,column)).isRoom() &&
+					cells.get(calcIndex(row,column)).isDoorway())) {
+					if (cells.get(calcIndex(row,column)).isDoorway()) {
+						DoorDirection dir = cells.get(calcIndex(row, column)).getDoorDirection();
+						switch (dir) {
+						case UP:
+							adjacencyMatrix.get(index).add(calcIndex(row - 1, column));
+							break;
+						case DOWN:
+							adjacencyMatrix.get(index).add(calcIndex(row + 1, column));
+							break;
+						case LEFT:
+							adjacencyMatrix.get(index).add(calcIndex(row, column - 1));
+							break;
+						case RIGHT:
+							adjacencyMatrix.get(index).add(calcIndex(row, column + 1));
+							break;
+						case NONE:
+							break;
+						}
+					} else {
+						// ABOVE
+						if (row > 0) {
+							if (cells.get(calcIndex(row - 1, column)).isWalkway() ||
+									(cells.get(calcIndex(row - 1,column)).isDoorway() &&
+											(cells.get(calcIndex(row - 1,column)).getDoorDirection() == DoorDirection.DOWN))) {
+								adjacencyMatrix.get(index).add(calcIndex(row - 1, column));
+							}
+						}
+						// BELOW
+						if (row < (numRows - 1)) {
+							if (cells.get(calcIndex(row + 1, column)).isWalkway() ||
+									(cells.get(calcIndex(row + 1,column)).isDoorway() &&
+											(cells.get(calcIndex(row + 1,column)).getDoorDirection() == DoorDirection.UP))) {
+								adjacencyMatrix.get(index).add(calcIndex(row + 1, column));
+							}
+						}
+						// LEFT
+						if (column > 0) {
+							if (cells.get(calcIndex(row, column - 1)).isWalkway() ||
+									(cells.get(calcIndex(row,column - 1)).isDoorway() &&
+											(cells.get(calcIndex(row,column - 1)).getDoorDirection() == DoorDirection.RIGHT))) {
+								adjacencyMatrix.get(index).add(calcIndex(row, column - 1));
+							}
+						}
+						// RIGHT
+						if (column < (numColumns - 1)) {
+							if (cells.get(calcIndex(row, column + 1)).isWalkway() ||
+									(cells.get(calcIndex(row,column + 1)).isDoorway() &&
+											(cells.get(calcIndex(row,column + 1)).getDoorDirection() == DoorDirection.LEFT))) {
+								adjacencyMatrix.get(index).add(calcIndex(row, column + 1));
+							}
+						}
+					}
 				}
-				DoorDirection d = getRoomCellAt(i).getDoorDirection();
-				switch (d) {
-				// Check if we're entering the doorway from the right direction
-				case UP: {
-					if (i != location + numColumns)
-						it.remove();
-					break;
-				}
-				case DOWN: {
-					if (i != location - numColumns)
-						it.remove();
-
-					break;
-				}
-				case LEFT: {
-					if (i != location + 1)
-						it.remove();
-					break;
-
-				}
-				case RIGHT: {
-					if (i != location - 1)
-						it.remove();
-					break;
-
-				}
-				case NONE: {
-					throw new RuntimeException(
-							"Unable to get a door direciton from a door!");
-				}
-				}
-
 			}
 		}
-		return newList;
 	}
-
-	// This method steals the signature of the one above it because the CR
-	// JUnits
-	// expect linked lists for some reason
-	public LinkedList<Integer> getAdjList(int location) {
-		LinkedList<Integer> tempList = new LinkedList<Integer>();
-		tempList.addAll(getValidAdjacencies(location));
-		return tempList;
+	
+	public ArrayList<Integer> getAdjList(int index) {
+		return adjacencyMatrix.get(index);
 	}
 
 	public void calcTargets(int row, int column, int numSteps) {
@@ -410,7 +391,7 @@ public class Board {
 			return;
 		// Make a copy of the precalculated adjacency list for the current cell
 		ArrayList<Integer> adjListThisCell = new ArrayList<Integer>();
-		for (Integer adjCell : getValidAdjacencies(thisCell)) {
+		for (Integer adjCell : getAdjList(thisCell)) {
 			// Only look at cells that haven't been visited
 			if (visited[adjCell] == false)
 				adjListThisCell.add(adjCell);

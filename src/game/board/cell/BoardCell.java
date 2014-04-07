@@ -1,5 +1,7 @@
 package game.board.cell;
 
+import game.board.cell.RoomCell.DoorDirection;
+
 import java.awt.Graphics;
 
 public abstract class BoardCell {
@@ -45,5 +47,9 @@ public abstract class BoardCell {
 
 	public int getRow() {
 		return row;
+	}
+	
+	public DoorDirection getDoorDirection() {
+		return DoorDirection.NONE;
 	}
 }

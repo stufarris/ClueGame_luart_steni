@@ -77,6 +77,7 @@ public class RoomCell extends BoardCell {
 		}
 	}
 
+	@Override
 	public DoorDirection getDoorDirection() {
 		return doorDirection;
 	}
