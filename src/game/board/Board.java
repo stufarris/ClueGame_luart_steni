@@ -366,48 +366,39 @@ public class Board {
 	public ArrayList<Integer> getAdjList(int index) {
 		return adjacencyMatrix.get(index);
 	}
-
-	public void calcTargets(int row, int column, int numSteps) {
-		calcTargets(calcIndex(row, column), numSteps);
-	}
-
-	public void calcTargets(int location, int numSteps) {
-		visited = new boolean[numRows * numColumns];
-		for (int i = 0; i < numRows * numColumns; i++)
+	
+	public void startTargets(int row, int column, int move) {
+		// Setup
+		for (int i = 0; i < visited.length; i++) {
 			visited[i] = false;
-		// mark start location as visited
-		visited[location] = true;
-		targets = new HashSet<BoardCell>();
-		calcTargetsRecursive(location, numSteps);
-	}
-
-	public void calcTargetsRecursive(int row, int column, int numSteps) {
-		calcTargetsRecursive(calcIndex(row, column), numSteps);
-	}
-
-	public void calcTargetsRecursive(int thisCell, int numSteps) {
-		// if we've reached this point, we can go no further down this path
-		if (numSteps == 0)
-			return;
-		// Make a copy of the precalculated adjacency list for the current cell
-		ArrayList<Integer> adjListThisCell = new ArrayList<Integer>();
-		for (Integer adjCell : getAdjList(thisCell)) {
-			// Only look at cells that haven't been visited
-			if (visited[adjCell] == false)
-				adjListThisCell.add(adjCell);
 		}
-		for (Integer adjCell : adjListThisCell) {
-			visited[adjCell] = true;
-			if (getCellAt(adjCell).isDoorway()) {
-				targets.add(getCellAt(adjCell));
+		if (adjacencyMatrix.isEmpty()) {
+			calcAdjacencies();
+		}
+		targets.clear();
+		visited[calcIndex(row, column)] = true;
+		calcTargets(calcIndex(row,column), move);
+	}
+	
+
+	public void calcTargets(int index, int move) {
+		ArrayList<Integer> adjacentCells = new ArrayList<Integer>();
+		for (Integer cell : getAdjList(index)) {
+			if (!visited[cell]) {
+				adjacentCells.add(cell);
 			}
-			if (numSteps == 1) {
-				if (!targets.contains(getCellAt(adjCell)))
-					targets.add(getCellAt(adjCell));
-			} else {
-				calcTargetsRecursive(adjCell, numSteps - 1);
+		}
+		for (Integer cell : adjacentCells) {
+			visited[cell] = true;
+			if (move == 1) {
+				targets.add(cells.get(cell));
+			} else if (cells.get(cell).isDoorway()) {
+				targets.add(cells.get(cell));
 			}
-			visited[adjCell] = false;
+			else {
+				calcTargets(cell, (move - 1));
+			}
+			visited[cell] = false;
 		}
 	}
 

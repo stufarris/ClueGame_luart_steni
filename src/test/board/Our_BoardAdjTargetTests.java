@@ -157,16 +157,16 @@ public class Our_BoardAdjTargetTests {
 
 	@Test
 	public void testTargetsWithOne() {
-		board.calcTargets(board.calcIndex(6, 4), 1);
+		board.startTargets(6, 4, 1);
 		Set<BoardCell> targets = board.getTargets();
 		Assert.assertTrue(board.getCellAt(board.calcIndex(5, 4)).isDoorway());
 		Assert.assertTrue(targets.contains(board.getCellAt(board
 				.calcIndex(5, 4))));
-		board.calcTargets(board.calcIndex(6, 4), 2);
+		board.startTargets(6, 4, 2);
 		targets = board.getTargets();
 		Assert.assertTrue(targets.contains(board.getCellAt(board
 				.calcIndex(5, 4))));
-		board.calcTargets(board.calcIndex(6, 4), 3);
+		board.startTargets(6, 4, 3);
 		targets = board.getTargets();
 		Assert.assertTrue(targets.contains(board.getCellAt(board
 				.calcIndex(5, 4))));
@@ -174,7 +174,7 @@ public class Our_BoardAdjTargetTests {
 
 	@Test
 	public void testTargetsWithTwo() {
-		board.calcTargets(7, 4, 2);
+		board.startTargets(7, 4, 2);
 		Set<BoardCell> targets = board.getTargets();
 		assertTrue(board.getCellAt(board.calcIndex(5, 4)).isDoorway());
 		assertTrue(targets.contains(board.getCellAt(5, 4)));
@@ -188,7 +188,7 @@ public class Our_BoardAdjTargetTests {
 
 	@Test
 	public void testTargetsWithThree() {
-		board.calcTargets(6, 6, 3);
+		board.startTargets(6, 6, 3);
 		Set<BoardCell> targets = board.getTargets();
 		Assert.assertTrue(board.getCellAt(board.calcIndex(5, 4)).isDoorway());
 		Assert.assertTrue(targets.contains(board.getCellAt(board
@@ -197,7 +197,7 @@ public class Our_BoardAdjTargetTests {
 
 	@Test
 	public void testTargetsWithFour() {
-		board.calcTargets(6, 7, 4);
+		board.startTargets(6, 7, 4);
 		Set<BoardCell> targets = board.getTargets();
 		Assert.assertTrue(board.getCellAt(5, 4).isDoorway());
 		Assert.assertTrue(targets.contains(board.getCellAt(board
@@ -207,7 +207,7 @@ public class Our_BoardAdjTargetTests {
 	@Test
 	public void testLeavingRoomA() {
 		assertTrue(board.getCellAt(17, 2).isDoorway());
-		board.calcTargets(17, 2, 1);
+		board.startTargets(17, 2, 1);
 		Set<BoardCell> targets = board.getTargets();
 		assertTrue(targets.contains(board.getCellAt(16, 2)));
 		assertEquals(1, targets.size());
@@ -215,7 +215,7 @@ public class Our_BoardAdjTargetTests {
 
 	@Test
 	public void testLeavingRoomB() {
-		board.calcTargets(18, 22, 1);
+		board.startTargets(18, 22, 1);
 		Set<BoardCell> targets = board.getTargets();
 		assertTrue(targets.contains(board.getCellAt(18, 23)));
 		assertEquals(1, targets.size());
@@ -223,19 +223,19 @@ public class Our_BoardAdjTargetTests {
 
 	@Test
 	public void testAlongWalkwaysNoRooms() {
-		board.calcTargets(13, 11, 1);
+		board.startTargets(13, 11, 1);
 		Set<BoardCell> targets = board.getTargets();
 		Iterator<BoardCell> i = targets.iterator();
 		while (i.hasNext()) {
 			Assert.assertFalse(i.next().isDoorway());
 		}
-		board.calcTargets(13, 11, 2);
+		board.startTargets(13, 11, 2);
 		targets = board.getTargets();
 		i = targets.iterator();
 		while (i.hasNext()) {
 			Assert.assertFalse(i.next().isDoorway());
 		}
-		board.calcTargets(3, 11, 3);
+		board.startTargets(3, 11, 3);
 		targets = board.getTargets();
 		i = targets.iterator();
 		while (i.hasNext()) {
@@ -244,7 +244,7 @@ public class Our_BoardAdjTargetTests {
 	}
 	@Test
 	public void testWalkwayCorner() {
-		board.calcTargets(17, 5, 2);
+		board.startTargets(17, 5, 2);
 		Set<BoardCell> targets = board.getTargets();
 		assertTrue(targets.contains(board.getCellAt(16,4)));
 		assertTrue(targets.contains(board.getCellAt(15,5)));

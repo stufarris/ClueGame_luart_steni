@@ -265,14 +265,14 @@ public class ClueGame extends JPanel{
 		}
 		rollDice();
 		p.setRoll(dieRoll);
-		board.calcTargets(currentPlayer.getRow(), currentPlayer.getColumn(), dieRoll);
+		board.startTargets(currentPlayer.getRow(), currentPlayer.getColumn(), dieRoll);
 		if (currentPlayer.isHuman()) {
 			// do human things
 		}
 		else {
 			// do computer things
-			//ComputerPlayer currentComputer = (ComputerPlayer)currentPlayer;
-			//currentComputer.updateLocation(currentComputer.pickLocation(board.getTargets()));
+			ComputerPlayer currentComputer = (ComputerPlayer)currentPlayer;
+			currentComputer.updateLocation(currentComputer.pickLocation(board.getTargets()));
 			// is the player in a room? do suggestion things
 		}
 		
