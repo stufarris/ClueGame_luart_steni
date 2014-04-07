@@ -45,6 +45,7 @@ public class ClueGame extends JPanel{
 	private Board board;
 	
 	private int dieRoll;
+	private boolean humanMustFinish;
 	
 	private int clickX;
 	private int clickY;
@@ -260,30 +261,34 @@ public class ClueGame extends JPanel{
 	
 	public void nextPlayerPressed(DisplayPanel p) {
 		
-		if (currentPlayer == null) {
-			currentPlayer = computerPlayers.get(0);
-		}
-		else {
-			int nextIndex = players.indexOf(currentPlayer) + 1;
-			if (nextIndex > (players.size() - 1)) {
-				nextIndex = 0;
+		if (!humanMustFinish) {
+		
+			if (currentPlayer == null) {
+				currentPlayer = computerPlayers.get(0);
 			}
-			currentPlayer = players.get(nextIndex);
+			else {
+				int nextIndex = players.indexOf(currentPlayer) + 1;
+				if (nextIndex > (players.size() - 1)) {
+					nextIndex = 0;
+				}
+				currentPlayer = players.get(nextIndex);
+			}
+			rollDice();
+			p.setRoll(dieRoll);
+			board.startTargets(currentPlayer.getRow(), currentPlayer.getColumn(), dieRoll);
+			if (currentPlayer.isHuman()) {
+				board.highlightTargets();
+				humanMustFinish = true;
+				repaint();
+			}
+			else {
+				// do computer things
+				ComputerPlayer currentComputer = (ComputerPlayer)currentPlayer;
+				currentComputer.updateLocation(currentComputer.pickLocation(board.getTargets()));
+				// is the player in a room? do suggestion things
+			}
 		}
-		rollDice();
-		p.setRoll(dieRoll);
-		board.startTargets(currentPlayer.getRow(), currentPlayer.getColumn(), dieRoll);
-		if (currentPlayer.isHuman()) {
-			board.highlightTargets();
-			repaint();
-			
-		}
-		else {
-			// do computer things
-			ComputerPlayer currentComputer = (ComputerPlayer)currentPlayer;
-			currentComputer.updateLocation(currentComputer.pickLocation(board.getTargets()));
-			// is the player in a room? do suggestion things
-		}
+		
 		repaint();
 		
 	}
@@ -300,7 +305,7 @@ public class ClueGame extends JPanel{
 		public void mouseClicked(MouseEvent event) {
 			clickX = event.getPoint().x;
 			clickY = event.getPoint().y;
-			
+			// Determine if a valid target is clicked, if it is, do stuff
 		}
 
 		@Override
