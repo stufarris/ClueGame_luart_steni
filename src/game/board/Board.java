@@ -401,6 +401,12 @@ public class Board {
 			visited[cell] = false;
 		}
 	}
+	
+	public void highlightTargets() {
+		for (BoardCell b : targets) {
+			b.setHighlighted(true);
+		}
+	}
 
 	public int calcIndex(int row, int column) {
 		if (row >= 0 && row < numRows && column >= 0 && column < numColumns) {
@@ -416,9 +422,6 @@ public class Board {
 		int height = BOARD_CELL_HEIGHT * numRows;
 
 		jp.setPreferredSize(new Dimension(width + x_offset, height + y_offset));
-
-		g.setColor(Color.YELLOW);
-		g.fillRect((width + x_offset) / 2 - width / 2, y_offset, width, height);
 
 		for(BoardCell b : cells) {
 			b.draw(g, x_offset, y_offset, BOARD_CELL_WIDTH, BOARD_CELL_HEIGHT);

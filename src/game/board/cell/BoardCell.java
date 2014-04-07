@@ -52,4 +52,6 @@ public abstract class BoardCell {
 	public DoorDirection getDoorDirection() {
 		return DoorDirection.NONE;
 	}
+
+	public abstract void setHighlighted(boolean isHighlighted);
 }

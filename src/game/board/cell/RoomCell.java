@@ -10,6 +10,7 @@ public class RoomCell extends BoardCell {
 	private char letter;
 	private boolean printsLabel;
 	private String roomName;
+	private boolean isHighlighted;
 	
 	
 	public enum DoorDirection {
@@ -50,7 +51,11 @@ public class RoomCell extends BoardCell {
 
 	@Override
 	public void draw(Graphics g, int x, int y, int width, int height) {
-		g.setColor(Color.LIGHT_GRAY);
+		if (isHighlighted) {
+			g.setColor(Color.CYAN);
+		} else {
+			g.setColor(Color.LIGHT_GRAY);
+		}
 		g.fillRect(x + width * this.column, y + height * this.row, width, height);
 		if(this.isDoorway()) {
 			g.setColor(Color.BLUE);
@@ -80,5 +85,9 @@ public class RoomCell extends BoardCell {
 	@Override
 	public DoorDirection getDoorDirection() {
 		return doorDirection;
+	}
+	
+	public void setHighlighted(boolean isHighlighted) {
+		this.isHighlighted = isHighlighted;
 	}
 }

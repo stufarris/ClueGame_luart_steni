@@ -267,7 +267,9 @@ public class ClueGame extends JPanel{
 		p.setRoll(dieRoll);
 		board.startTargets(currentPlayer.getRow(), currentPlayer.getColumn(), dieRoll);
 		if (currentPlayer.isHuman()) {
-			// do human things
+			board.highlightTargets();
+			repaint();
+			
 		}
 		else {
 			// do computer things
@@ -275,6 +277,7 @@ public class ClueGame extends JPanel{
 			currentComputer.updateLocation(currentComputer.pickLocation(board.getTargets()));
 			// is the player in a room? do suggestion things
 		}
+		repaint();
 		
 	}
 	
