@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
+import game.board.cell.BoardCell;
 import game.card.Card;
 
 public class Player {
@@ -128,10 +129,13 @@ public class Player {
 		 if (!this.getName().equals(((Player)other).getName())) return false;
 		 return true;
 	}
-
-	@Override
-	public int hashCode() {
-		return (this.id + this.color.toString()).hashCode();
+	
+	public boolean isHuman() {
+		return false;
 	}
 	
+	public void updateLocation(BoardCell c) {
+		this.row = c.getRow();
+		this.column = c.getColumn();
+	}
 }

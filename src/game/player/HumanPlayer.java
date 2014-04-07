@@ -16,5 +16,10 @@ public class HumanPlayer extends Player {
 		this.seenWeapons = new ArrayList<Card>(game.getWeapons());
 		this.seenRooms = new ArrayList<Card>(game.getRooms());
 	}
+	
+	@Override
+	public boolean isHuman() {
+		return true;
+	}
 
 }

@@ -4,7 +4,6 @@ package gui;
 import game.ClueGame;
 import game.card.Card;
 import gui.panel.DisplayPanel;
-import gui.panel.PlayerActionPanel;
 import gui.panel.TurnPanel;
 
 import java.awt.BorderLayout;
@@ -14,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JMenu;
@@ -26,9 +26,13 @@ import javax.swing.border.TitledBorder;
 
 
 public class ControlFrame extends JFrame {
+	private static final long serialVersionUID = 1894147726485509401L;
 	private static ClueGame game;
-	private JPanel uiPanel, cardsPanel;
+	private JPanel uiPanel, cardsPanel, actionPanel;
+	private TurnPanel turnPanel;
+	private DisplayPanel displayPanel;
 	private JMenuBar menu;
+	private JButton nextPlayerButton, accusationButton;
 
 	private static final int WINDOW_WIDTH = 800;
 	private static final int WINDOW_HEIGHT = 690;
@@ -42,16 +46,21 @@ public class ControlFrame extends JFrame {
 		this.setTitle("The Game of Clue");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout(new BorderLayout());
+		
+		createActionPanel();
 
 		uiPanel = new JPanel();
 		uiPanel.setLayout(new BorderLayout());
 		uiPanel.setSize(new Dimension(800, 30));
-		uiPanel.add(new TurnPanel(), BorderLayout.WEST);
-		uiPanel.add(new PlayerActionPanel(), BorderLayout.EAST);
+		turnPanel = new TurnPanel();
+		uiPanel.add(turnPanel, BorderLayout.WEST);
+		uiPanel.add(actionPanel, BorderLayout.EAST);
 		
 		createCardsPanel();
-
-		this.add(new DisplayPanel(), BorderLayout.SOUTH);
+		
+		displayPanel = new DisplayPanel();
+		
+		this.add(displayPanel, BorderLayout.SOUTH);
 		this.add(uiPanel, BorderLayout.NORTH);
 		this.add(game, BorderLayout.CENTER);
 		this.add(cardsPanel, BorderLayout.EAST);
@@ -63,7 +72,7 @@ public class ControlFrame extends JFrame {
 		JOptionPane.showMessageDialog(null, "You are " + game.getHumanPlayer().getName() + ", press Next Player to begin play!");
 
 	}
-	
+
 	private void createCardsPanel() {
 		cardsPanel = new JPanel();
 		cardsPanel.setLayout(new GridLayout(0, 1));
@@ -75,6 +84,25 @@ public class ControlFrame extends JFrame {
 		}
 		JList<String> cardList = new JList<String>(cardNames);
 		cardsPanel.add(cardList);
+	}
+	
+	private void createActionPanel() {
+		actionPanel = new JPanel();
+		actionPanel.setLayout(new GridLayout(1,2));
+		nextPlayerButton = new JButton("Next Player");
+		nextPlayerButton.addActionListener(new nextPlayerListener());
+		accusationButton = new JButton("Make an Accusation");
+		actionPanel.add(nextPlayerButton);
+		actionPanel.add(accusationButton);
+	}
+	
+	private class nextPlayerListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			game.nextPlayerPressed(displayPanel);
+			turnPanel.updateTurn(game.getCurrentPlayer());
+			nextPlayerButton.setEnabled(false);
+		}
 	}
 
 	private JMenu createFileMenu()

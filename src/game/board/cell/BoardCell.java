@@ -38,4 +38,12 @@ public abstract class BoardCell {
 	public String toString() {
 		return "(" + row + ", " + column + ")";
 	}
+
+	public int getColumn() {
+		return column;
+	}
+
+	public int getRow() {
+		return row;
+	}
 }

@@ -24,6 +24,7 @@ import game.card.Card;
 import game.player.ComputerPlayer;
 import game.player.HumanPlayer;
 import game.player.Player;
+import gui.panel.DisplayPanel;
 
 public class ClueGame extends JPanel{
 
@@ -36,9 +37,12 @@ public class ClueGame extends JPanel{
 	private ArrayList<ComputerPlayer> computerPlayers;
 	private HumanPlayer humanPlayer;
 	private ArrayList<Player> players;
+	private Player currentPlayer;
 	
 	private Solution solution;
 	private Board board;
+	
+	private int dieRoll;
 	
 	private static final int BOARD_DIMENSION = 650;
 	
@@ -59,8 +63,13 @@ public class ClueGame extends JPanel{
 		weapons = new HashSet<Card>();
 		rooms = new HashSet<Card>();
 		characters = new HashSet<Card>();
+		currentPlayer = null;
 	}
 	
+	public Player getCurrentPlayer() {
+		return currentPlayer;
+	}
+
 	public void loadConfigFiles(String characterFilename, String weaponFilename, String playerFilename) {
 		board = new Board("data/board/ClueLayout.csv", "data/board/ClueLegend.txt");
 		board.loadConfigFiles();
@@ -241,5 +250,37 @@ public class ClueGame extends JPanel{
 		for(Player p : players){
 			p.draw(g, X_OFFSET, Y_OFFSET, PLAYER_DIMENSION, PLAYER_DIMENSION);
 		}
+	}
+	
+	public void nextPlayerPressed(DisplayPanel p) {
+		
+		if (currentPlayer == null) {
+			currentPlayer = humanPlayer;
+		}
+		else {
+			int nextIndex = players.indexOf(currentPlayer) + 1;
+			if (nextIndex > (players.size() - 1)) {
+				nextIndex = 0;
+			}
+		}
+		rollDice();
+		p.setRoll(dieRoll);
+		board.calcTargets(currentPlayer.getRow(), currentPlayer.getColumn(), dieRoll);
+		if (currentPlayer.isHuman()) {
+			// do human things
+		}
+		else {
+			// do computer things
+			//ComputerPlayer currentComputer = (ComputerPlayer)currentPlayer;
+			//currentComputer.updateLocation(currentComputer.pickLocation(board.getTargets()));
+			// is the player in a room? do suggestion things
+		}
+		
+	}
+	
+	private void rollDice() {
+		Random rand = new Random();
+		dieRoll = rand.nextInt(5) + 1;
+		
 	}
 }
