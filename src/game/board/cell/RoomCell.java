@@ -11,6 +11,7 @@ public class RoomCell extends BoardCell {
 	private boolean printsLabel;
 	private String roomName;
 	private boolean isHighlighted;
+	private static final int LABEL_Y_OFFSET = 5;
 	
 	
 	public enum DoorDirection {
@@ -78,7 +79,7 @@ public class RoomCell extends BoardCell {
 		}
 		if (printsLabel) {
 			g.setColor(Color.BLACK);
-			g.drawString(roomName, x + width * this.column, y + height * this.row);
+			g.drawString(roomName, x + width * this.column, y + (height * this.row) - LABEL_Y_OFFSET);
 		}
 	}
 

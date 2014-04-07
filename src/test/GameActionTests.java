@@ -19,8 +19,8 @@ public class GameActionTests {
 	
 	private static ClueGame game;
 
-	@Before
-	public void setUp() {
+	@BeforeClass
+	public static void setUp() {
 		game = new ClueGame();
 		game.loadConfigFiles("data/card/character/characters.txt", "data/card/weapon/weapons.txt", "data/Players.txt");
 		game.dealCards();
@@ -144,9 +144,9 @@ public class GameActionTests {
 		
 		// Remove all possible weapons
 		for(Card c : game.getWeapons()) {
-			players.get(0).seeCard(c);
+			players.get(0).forgetCard(c);
 		}
-		players.get(0).getSeenWeapons().add(new ArrayList<Card>(game.getWeapons()).get(0));
+		players.get(0).seeCard(new ArrayList<Card>(game.getWeapons()).get(0));
 		for(Card c : game.getCharacters()) {
 			players.get(0).seeCard(c);
 		}

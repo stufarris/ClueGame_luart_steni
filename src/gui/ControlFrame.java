@@ -11,6 +11,8 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -101,7 +103,6 @@ public class ControlFrame extends JFrame {
 		public void actionPerformed(ActionEvent arg0) {
 			game.nextPlayerPressed(displayPanel);
 			turnPanel.updateTurn(game.getCurrentPlayer());
-			nextPlayerButton.setEnabled(false);
 		}
 	}
 

@@ -3,6 +3,8 @@ package game;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -44,6 +46,9 @@ public class ClueGame extends JPanel{
 	
 	private int dieRoll;
 	
+	private int clickX;
+	private int clickY;
+	
 	private static final int BOARD_DIMENSION = 650;
 	
 	private static final int HUMAN_START_ROW = 19;
@@ -56,6 +61,7 @@ public class ClueGame extends JPanel{
 		this.setPreferredSize(new Dimension(BOARD_DIMENSION, BOARD_DIMENSION));
 		this.setSize(new Dimension(BOARD_DIMENSION, BOARD_DIMENSION));
 		this.setBorder(new TitledBorder (new EtchedBorder(), "Game Board"));
+		this.addMouseListener(new HumanMoveListener());
 		
 		cards = new HashSet<Card>();
 		computerPlayers = new ArrayList<ComputerPlayer>();
@@ -255,13 +261,14 @@ public class ClueGame extends JPanel{
 	public void nextPlayerPressed(DisplayPanel p) {
 		
 		if (currentPlayer == null) {
-			currentPlayer = humanPlayer;
+			currentPlayer = computerPlayers.get(0);
 		}
 		else {
 			int nextIndex = players.indexOf(currentPlayer) + 1;
 			if (nextIndex > (players.size() - 1)) {
 				nextIndex = 0;
 			}
+			currentPlayer = players.get(nextIndex);
 		}
 		rollDice();
 		p.setRoll(dieRoll);
@@ -286,4 +293,31 @@ public class ClueGame extends JPanel{
 		dieRoll = rand.nextInt(5) + 1;
 		
 	}
+	
+	private class HumanMoveListener implements MouseListener {
+
+		@Override
+		public void mouseClicked(MouseEvent event) {
+			clickX = event.getPoint().x;
+			clickY = event.getPoint().y;
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {
+		}
+
+		@Override
+		public void mouseExited(MouseEvent arg0) {	
+		}
+
+		@Override
+		public void mousePressed(MouseEvent arg0) {
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent arg0) {
+		}
+	}
+		
 }
