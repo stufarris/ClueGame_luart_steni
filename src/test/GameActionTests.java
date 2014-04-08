@@ -11,7 +11,6 @@ import game.card.Card;
 import game.player.ComputerPlayer;
 import game.player.Player;
 
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -134,7 +133,6 @@ public class GameActionTests {
 		
 		// Tests that players are queried in a certain order
 		assertTrue(null == game.handleSuggestion("gunner", "gunroom", "gun", players.get(0)));
-		
 	}
 	
 	@Test
@@ -144,9 +142,9 @@ public class GameActionTests {
 		
 		// Remove all possible weapons
 		for(Card c : game.getWeapons()) {
-			players.get(0).forgetCard(c);
+			players.get(0).seeCard(c);
 		}
-		players.get(0).seeCard(new ArrayList<Card>(game.getWeapons()).get(0));
+		players.get(0).getSeenWeapons().add(new ArrayList<Card>(game.getWeapons()).get(0));
 		for(Card c : game.getCharacters()) {
 			players.get(0).seeCard(c);
 		}
