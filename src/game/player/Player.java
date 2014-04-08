@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
+import game.board.cell.BoardCell;
 import game.card.Card;
 
 public class Player {
@@ -48,13 +49,13 @@ public class Player {
 		return buffer.get(new Random().nextInt(buffer.size()));
 	}
 	
-	public void seeCard(Card c) {
+	public void forgetCard(Card c) {
 		if(c.getType() == Card.CardType.PERSON) seenCharacters.remove(c);
 		else if(c.getType() == Card.CardType.WEAPON) seenWeapons.remove(c);
 		else if(c.getType() == Card.CardType.ROOM) seenRooms.remove(c);
 	}
 	
-	public void forgetCard(Card c) {
+	public void seeCard(Card c) {
 		if(c.getType() == Card.CardType.PERSON && !seenCharacters.contains(c)) seenCharacters.add(c);
 		else if(c.getType() == Card.CardType.WEAPON && !seenWeapons.contains(c)) seenWeapons.add(c);
 		else if(c.getType() == Card.CardType.ROOM && !seenRooms.contains(c)) seenRooms.add(c);
@@ -131,10 +132,13 @@ public class Player {
 		 if (!this.getName().equals(((Player)other).getName())) return false;
 		 return true;
 	}
-
-	@Override
-	public int hashCode() {
-		return (this.id + this.color.toString()).hashCode();
+	
+	public boolean isHuman() {
+		return false;
 	}
 	
+	public void updateLocation(BoardCell c) {
+		this.row = c.getRow();
+		this.column = c.getColumn();
+	}
 }

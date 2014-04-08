@@ -3,6 +3,8 @@ package game;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -15,15 +17,18 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 import game.board.Board;
+import game.board.cell.BoardCell;
 import game.card.Card;
 import game.player.ComputerPlayer;
 import game.player.HumanPlayer;
 import game.player.Player;
+import gui.panel.DisplayPanel;
 
 public class ClueGame extends JPanel{
 
@@ -36,11 +41,16 @@ public class ClueGame extends JPanel{
 	private ArrayList<ComputerPlayer> computerPlayers;
 	private HumanPlayer humanPlayer;
 	private ArrayList<Player> players;
+	private Player currentPlayer;
 	
 	private Solution solution;
 	private Board board;
 	
+	private int dieRoll;
+	private boolean humanMustFinish;
+	
 	private static final int BOARD_DIMENSION = 650;
+	private static final int CLICK_Y_OFFSET = 15;
 	
 	private static final int HUMAN_START_ROW = 19;
 	private static final int HUMAN_START_COLUMN = 16;
@@ -52,6 +62,7 @@ public class ClueGame extends JPanel{
 		this.setPreferredSize(new Dimension(BOARD_DIMENSION, BOARD_DIMENSION));
 		this.setSize(new Dimension(BOARD_DIMENSION, BOARD_DIMENSION));
 		this.setBorder(new TitledBorder (new EtchedBorder(), "Game Board"));
+		this.addMouseListener(new HumanMoveListener());
 		
 		cards = new HashSet<Card>();
 		computerPlayers = new ArrayList<ComputerPlayer>();
@@ -59,8 +70,13 @@ public class ClueGame extends JPanel{
 		weapons = new HashSet<Card>();
 		rooms = new HashSet<Card>();
 		characters = new HashSet<Card>();
+		currentPlayer = null;
 	}
 	
+	public Player getCurrentPlayer() {
+		return currentPlayer;
+	}
+
 	public void loadConfigFiles(String characterFilename, String weaponFilename, String playerFilename) {
 		board = new Board("data/board/ClueLayout.csv", "data/board/ClueLegend.txt");
 		board.loadConfigFiles();
@@ -250,4 +266,84 @@ public class ClueGame extends JPanel{
 			p.draw(g, X_OFFSET, Y_OFFSET, PLAYER_DIMENSION, PLAYER_DIMENSION);
 		}
 	}
+	
+	public void nextPlayerPressed(DisplayPanel p) {
+		
+		if (!humanMustFinish) {
+		
+			if (currentPlayer == null) {
+				currentPlayer = humanPlayer;
+			}
+			else {
+				int nextIndex = players.indexOf(currentPlayer) + 1;
+				if (nextIndex > (players.size() - 1)) {
+					nextIndex = 0;
+				}
+				currentPlayer = players.get(nextIndex);
+			}
+			rollDice();
+			p.setRoll(dieRoll);
+			board.startTargets(currentPlayer.getRow(), currentPlayer.getColumn(), dieRoll);
+			if (currentPlayer.isHuman()) {
+				board.highlightTargets();
+				humanMustFinish = true;
+				repaint();
+			}
+			else {
+				// do computer things
+				ComputerPlayer currentComputer = (ComputerPlayer)currentPlayer;
+				currentComputer.updateLocation(currentComputer.pickLocation(board.getTargets()));
+				// is the player in a room? do suggestion things
+			}
+		}
+		
+		repaint();
+		
+	}
+	
+	private void rollDice() {
+		Random rand = new Random();
+		dieRoll = rand.nextInt(5) + 1;
+		
+	}
+	
+	private class HumanMoveListener implements MouseListener {
+
+		@Override
+		public void mouseClicked(MouseEvent event) {
+			int clickX = event.getX();
+			int clickY = event.getY() - CLICK_Y_OFFSET;
+			boolean validClick = false;
+			for (BoardCell b : board.getTargets()) {
+				if (b.isClicked(clickX, clickY)) {
+					currentPlayer.updateLocation(b);
+					humanMustFinish = false;
+					board.clearHighlights();
+					repaint();
+					validClick = true;
+					// Offer to make suggestion
+				}
+			}
+			if (!validClick) {
+				JOptionPane.showMessageDialog(null, "Invalid location clicked!");
+			}
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {
+		}
+
+		@Override
+		public void mouseExited(MouseEvent arg0) {	
+		}
+
+		@Override
+		public void mousePressed(MouseEvent arg0) {
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent arg0) {
+		}
+	}
+		
 }

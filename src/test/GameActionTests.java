@@ -19,8 +19,8 @@ public class GameActionTests {
 	
 	private static ClueGame game;
 
-	@Before
-	public void setUp() {
+	@BeforeClass
+	public static void setUp() {
 		game = new ClueGame();
 		game.loadConfigFiles("data/card/character/characters.txt", "data/card/weapon/weapons.txt", "data/Players.txt");
 		game.dealCards();
@@ -32,7 +32,7 @@ public class GameActionTests {
 	//tests that player enters a room from a walkway when that room is in its target list
 	public void testUnvisitedRoomEntry() {
 		ComputerPlayer testPlayer = new ComputerPlayer("Bob",Color.WHITE,4,4, game);
-		game.getBoard().calcTargets(testPlayer.getRow(), testPlayer.getColumn(), 1);
+		game.getBoard().startTargets(testPlayer.getRow(), testPlayer.getColumn(), 1);
 		assertEquals(testPlayer.pickLocation(game.getBoard().getTargets()), game.getBoard().getCellAt(4,3));		
 	}
 	
@@ -41,7 +41,7 @@ public class GameActionTests {
 	public void testIgnoreVisitedRoom(){
 		ComputerPlayer testPlayer = new ComputerPlayer("Bob",Color.WHITE,4,4, game);
 		testPlayer.setLastRoomVisited("Conservatory");
-		game.getBoard().calcTargets(testPlayer.getRow(), testPlayer.getColumn(), 1);
+		game.getBoard().startTargets(testPlayer.getRow(), testPlayer.getColumn(), 1);
 		assertTrue(testPlayer.pickLocation(game.getBoard().getTargets()) == game.getBoard().getCellAt(4, 3)
 				|| testPlayer.pickLocation(game.getBoard().getTargets()) == game.getBoard().getCellAt(4, 5)
 				|| testPlayer.pickLocation(game.getBoard().getTargets()) == game.getBoard().getCellAt(5, 4));
@@ -52,7 +52,7 @@ public class GameActionTests {
 	public void testTargetRandomSelection() {
 		ComputerPlayer player = new ComputerPlayer("Bob",Color.WHITE,14,0, game);
 		// Pick a location with no rooms in target, just three targets
-		game.getBoard().calcTargets(14, 0, 2);
+		game.getBoard().startTargets(14, 0, 2);
 		int loc_12_0Tot = 0;
 		int loc_14_2Tot = 0;
 		int loc_15_1Tot = 0;
@@ -144,9 +144,9 @@ public class GameActionTests {
 		
 		// Remove all possible weapons
 		for(Card c : game.getWeapons()) {
-			players.get(0).seeCard(c);
+			players.get(0).forgetCard(c);
 		}
-		players.get(0).getSeenWeapons().add(new ArrayList<Card>(game.getWeapons()).get(0));
+		players.get(0).seeCard(new ArrayList<Card>(game.getWeapons()).get(0));
 		for(Card c : game.getCharacters()) {
 			players.get(0).seeCard(c);
 		}

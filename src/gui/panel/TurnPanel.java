@@ -1,5 +1,7 @@
 package gui.panel;
 
+import game.player.Player;
+
 import java.awt.BorderLayout;
 
 import javax.swing.JLabel;
@@ -20,6 +22,10 @@ public class TurnPanel extends JPanel {
 		this.add(turnLabel, BorderLayout.NORTH);
 		this.add(nameField, BorderLayout.CENTER);
 		
+	}
+	
+	public void updateTurn(Player p) {
+		nameField.setText(p.getName());
 	}
 	
 }
