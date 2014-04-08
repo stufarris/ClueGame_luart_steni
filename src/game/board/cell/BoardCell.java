@@ -9,6 +9,7 @@ public abstract class BoardCell {
 	// location of this piece
 	protected int column;
 	protected int row;
+	protected int size;
 	
 	public BoardCell() {
 		
@@ -22,7 +23,7 @@ public abstract class BoardCell {
 		this.column = column;
 	}
 
-	public abstract void draw(Graphics g, int x, int y, int width, int height);
+	public abstract void draw(Graphics g, int x, int y, int dimension);
 
 	public boolean isWalkway() {
 		return false;
@@ -54,4 +55,23 @@ public abstract class BoardCell {
 	}
 
 	public abstract void setHighlighted(boolean isHighlighted);
+	
+	public boolean isClicked(int clickX, int clickY) {
+		int maxX, minX, maxY, minY;
+		minY = size * row;
+		minX = size * column;
+		maxY = size * (row + 1);
+		maxX = size * (column + 1);
+		
+		if (clickX <= maxX) {
+			if (clickY <= maxY) {
+				if (clickX >= minX) {
+					if (clickY >= minY) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
 }

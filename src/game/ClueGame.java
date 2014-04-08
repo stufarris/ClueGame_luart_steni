@@ -22,6 +22,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 import game.board.Board;
+import game.board.cell.BoardCell;
 import game.card.Card;
 import game.player.ComputerPlayer;
 import game.player.HumanPlayer;
@@ -47,10 +48,8 @@ public class ClueGame extends JPanel{
 	private int dieRoll;
 	private boolean humanMustFinish;
 	
-	private int clickX;
-	private int clickY;
-	
 	private static final int BOARD_DIMENSION = 650;
+	private static final int CLICK_Y_OFFSET = 15;
 	
 	private static final int HUMAN_START_ROW = 19;
 	private static final int HUMAN_START_COLUMN = 16;
@@ -264,7 +263,7 @@ public class ClueGame extends JPanel{
 		if (!humanMustFinish) {
 		
 			if (currentPlayer == null) {
-				currentPlayer = computerPlayers.get(0);
+				currentPlayer = humanPlayer;
 			}
 			else {
 				int nextIndex = players.indexOf(currentPlayer) + 1;
@@ -303,9 +302,17 @@ public class ClueGame extends JPanel{
 
 		@Override
 		public void mouseClicked(MouseEvent event) {
-			clickX = event.getPoint().x;
-			clickY = event.getPoint().y;
-			// Determine if a valid target is clicked, if it is, do stuff
+			int clickX = event.getX();
+			int clickY = event.getY() - CLICK_Y_OFFSET;
+			for (BoardCell b : board.getTargets()) {
+				if (b.isClicked(clickX, clickY)) {
+					currentPlayer.updateLocation(b);
+					humanMustFinish = false;
+				}
+			}
+			board.clearHighlights();
+			repaint();
+			// Offer to make suggestion
 		}
 
 		@Override

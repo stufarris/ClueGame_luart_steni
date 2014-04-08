@@ -40,8 +40,7 @@ public class Board {
 	private int numRows;
 	private int numColumns;
 
-	private static final int BOARD_CELL_WIDTH = 25;
-	private static final int BOARD_CELL_HEIGHT = 25;
+	private static final int BOARD_CELL_DIMENSION = 25;
 
 	public Board() {
 		// default uses CR board and legend
@@ -407,6 +406,12 @@ public class Board {
 			b.setHighlighted(true);
 		}
 	}
+	
+	public void clearHighlights() {
+		for (BoardCell b : targets) {
+			b.setHighlighted(false);
+		}
+	}
 
 	public int calcIndex(int row, int column) {
 		if (row >= 0 && row < numRows && column >= 0 && column < numColumns) {
@@ -418,13 +423,13 @@ public class Board {
 	}
 
 	public void drawBoard( int x_offset, int y_offset, Graphics g, JPanel jp) {
-		int width = BOARD_CELL_WIDTH * numColumns;
-		int height = BOARD_CELL_HEIGHT * numRows;
+		int width = BOARD_CELL_DIMENSION * numColumns;
+		int height = BOARD_CELL_DIMENSION * numRows;
 
 		jp.setPreferredSize(new Dimension(width + x_offset, height + y_offset));
 
 		for(BoardCell b : cells) {
-			b.draw(g, x_offset, y_offset, BOARD_CELL_WIDTH, BOARD_CELL_HEIGHT);
+			b.draw(g, x_offset, y_offset, BOARD_CELL_DIMENSION);
 		}
 
 	}

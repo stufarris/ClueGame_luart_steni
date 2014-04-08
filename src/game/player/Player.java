@@ -46,13 +46,13 @@ public class Player {
 		return buffer.get(new Random().nextInt(buffer.size()));
 	}
 	
-	public void seeCard(Card c) {
+	public void forgetCard(Card c) {
 		if(c.getType() == Card.CardType.PERSON) seenCharacters.remove(c);
 		else if(c.getType() == Card.CardType.WEAPON) seenWeapons.remove(c);
 		else if(c.getType() == Card.CardType.ROOM) seenRooms.remove(c);
 	}
 	
-	public void forgetCard(Card c) {
+	public void seeCard(Card c) {
 		if(c.getType() == Card.CardType.PERSON && !seenCharacters.contains(c)) seenCharacters.add(c);
 		else if(c.getType() == Card.CardType.WEAPON && !seenWeapons.contains(c)) seenWeapons.add(c);
 		else if(c.getType() == Card.CardType.ROOM && !seenRooms.contains(c)) seenRooms.add(c);

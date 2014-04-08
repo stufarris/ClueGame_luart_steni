@@ -51,27 +51,28 @@ public class RoomCell extends BoardCell {
 	}
 
 	@Override
-	public void draw(Graphics g, int x, int y, int width, int height) {
+	public void draw(Graphics g, int x, int y, int dimension) {
+		this.size = dimension;
 		if (isHighlighted) {
 			g.setColor(Color.CYAN);
 		} else {
 			g.setColor(Color.LIGHT_GRAY);
 		}
-		g.fillRect(x + width * this.column, y + height * this.row, width, height);
+		g.fillRect(x + dimension * this.column, y + dimension * this.row, dimension, dimension);
 		if(this.isDoorway()) {
 			g.setColor(Color.BLUE);
 			switch(this.doorDirection) {
 			case UP:
-				g.fillRect(x + width * this.column, y + height * this.row, width, height / 5);
+				g.fillRect(x + dimension * this.column, y + dimension * this.row, dimension, dimension / 5);
 				break;
 			case DOWN:
-				g.fillRect(x + width * this.column, y + (height * this.row) + (height * 4) / 5, width, height / 5);
+				g.fillRect(x + dimension * this.column, y + (dimension * this.row) + (dimension * 4) / 5, dimension, dimension / 5);
 				break;
 			case LEFT:
-				g.fillRect(x + width * this.column, y + height * this.row, width / 5, height);
+				g.fillRect(x + dimension * this.column, y + dimension * this.row, dimension / 5, dimension);
 				break;
 			case RIGHT:
-				g.fillRect(x + (width * this.column) + (width * 4) / 5, y + height * this.row, width / 5, height);
+				g.fillRect(x + (dimension * this.column) + (dimension * 4) / 5, y + dimension * this.row, dimension / 5, dimension);
 				break;
 			default:
 				break;
@@ -79,7 +80,7 @@ public class RoomCell extends BoardCell {
 		}
 		if (printsLabel) {
 			g.setColor(Color.BLACK);
-			g.drawString(roomName, x + width * this.column, y + (height * this.row) - LABEL_Y_OFFSET);
+			g.drawString(roomName, x + dimension * this.column, y + (dimension * this.row) - LABEL_Y_OFFSET);
 		}
 	}
 
