@@ -17,6 +17,7 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
@@ -304,15 +305,20 @@ public class ClueGame extends JPanel{
 		public void mouseClicked(MouseEvent event) {
 			int clickX = event.getX();
 			int clickY = event.getY() - CLICK_Y_OFFSET;
+			boolean validClick = false;
 			for (BoardCell b : board.getTargets()) {
 				if (b.isClicked(clickX, clickY)) {
 					currentPlayer.updateLocation(b);
 					humanMustFinish = false;
+					board.clearHighlights();
+					repaint();
+					validClick = true;
+					// Offer to make suggestion
 				}
 			}
-			board.clearHighlights();
-			repaint();
-			// Offer to make suggestion
+			if (!validClick) {
+				JOptionPane.showMessageDialog(null, "Invalid location clicked!");
+			}
 		}
 
 		@Override
