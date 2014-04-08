@@ -142,7 +142,7 @@ public class GameActionTests {
 		
 		// Remove all possible weapons
 		for(Card c : game.getWeapons()) {
-			players.get(0).seeCard(c);
+			players.get(0).forgetCard(c);
 		}
 		players.get(0).getSeenWeapons().add(new ArrayList<Card>(game.getWeapons()).get(0));
 		for(Card c : game.getCharacters()) {
