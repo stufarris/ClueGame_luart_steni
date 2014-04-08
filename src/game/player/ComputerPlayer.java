@@ -50,7 +50,6 @@ public class ComputerPlayer extends Player {
 	
 	@Override
 	public void giveCard(Card c) {
-		seeCard(c);
 		super.giveCard(c);
 	}
 }

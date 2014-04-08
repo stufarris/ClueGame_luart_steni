@@ -25,6 +25,9 @@ public class Player {
 	
 	public Player(){
 		this.handOfCards = new HashSet<Card>();
+		this.seenRooms = new ArrayList<Card>();
+		this.seenWeapons = new ArrayList<Card>();
+		this.seenCharacters = new ArrayList<Card>();
 	}
 	
 	public Player(String id, Color color, int row, int column) {
