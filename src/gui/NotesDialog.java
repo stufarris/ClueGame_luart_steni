@@ -9,6 +9,7 @@ import java.awt.event.FocusListener;
 
 import game.ClueGame;
 import game.card.Card;
+import game.card.Card.CardType;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -17,6 +18,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+
+// TODO logic for showing "All weapons seen" or "All rooms seen" or "Everyone seen" is known to be incorrect
+// All dropdown boxes don't really work right, I believe the need to show NOT of what they do, also can probably
+// right some functions, BAD DRY
 
 public class NotesDialog extends JFrame {	
 	PeoplePanel peoplePanel;
@@ -51,8 +56,8 @@ public class NotesDialog extends JFrame {
 			for(Card c : game.getCharacters()){
 				JCheckBox cb = new JCheckBox(c.getTitle());
 				cb.addActionListener(new PeopleListener());
-				if(game.getHumanPlayer().getSeenCharacters().contains(c)) cb.setSelected(false);
-				else cb.setSelected(true);
+				if(game.getHumanPlayer().getSeenCards().contains(c)) cb.setSelected(true);
+				else cb.setSelected(false);
 				this.add(cb);
 			}
 		}
@@ -83,8 +88,14 @@ public class NotesDialog extends JFrame {
 
 		private void populateGuesses() {
 			comboBox.removeAllItems();
-			if(game.getHumanPlayer().getSeenCharacters().isEmpty()) comboBox.addItem("Everyone Seen");
-			else for(Card c : game.getHumanPlayer().getSeenCharacters()) comboBox.addItem(c.getTitle());
+			if(game.getHumanPlayer().getSeenCards().isEmpty()) comboBox.addItem("Everyone Seen");
+			else {
+				for(Card c : game.getHumanPlayer().getSeenCards()) {
+					if (c.getType() == CardType.PERSON) {
+						comboBox.addItem(c.getTitle());
+					}
+				}
+			}
 		}
 
 		private class pGuessListener implements FocusListener {
@@ -109,8 +120,8 @@ public class NotesDialog extends JFrame {
 			for(Card c : game.getRooms()){
 				JCheckBox cb = new JCheckBox(c.getTitle());
 				cb.addActionListener(new RoomListener());
-				if(game.getHumanPlayer().getSeenRooms().contains(c)) cb.setSelected(false);
-				else cb.setSelected(true);
+				if(game.getHumanPlayer().getSeenCards().contains(c)) cb.setSelected(true);
+				else cb.setSelected(false);
 				this.add(cb);
 			}
 		}
@@ -141,8 +152,14 @@ public class NotesDialog extends JFrame {
 
 		public void populateGuesses() {
 			comboBox.removeAllItems();
-			if(game.getHumanPlayer().getSeenRooms().isEmpty()) comboBox.addItem("All Rooms Seen");
-			else for(Card c : game.getHumanPlayer().getSeenRooms()) comboBox.addItem(c.getTitle());
+			if(game.getHumanPlayer().getSeenCards().isEmpty()) comboBox.addItem("All Rooms Seen");
+			else {
+				for(Card c : game.getHumanPlayer().getSeenCards()) {
+					if (c.getType() == CardType.ROOM) {	
+						comboBox.addItem(c.getTitle());
+					}
+				}
+			}
 		}
 
 		private class rGuessListener implements FocusListener {
@@ -167,8 +184,8 @@ public class NotesDialog extends JFrame {
 			for(Card c : game.getWeapons()){
 				JCheckBox cb = new JCheckBox(c.getTitle());
 				cb.addActionListener(new WeaponListener());
-				if(game.getHumanPlayer().getSeenWeapons().contains(c)) cb.setSelected(false);
-				else cb.setSelected(true);
+				if(game.getHumanPlayer().getSeenCards().contains(c)) cb.setSelected(true);
+				else cb.setSelected(false);
 				this.add(cb);
 			}
 		}
@@ -199,8 +216,14 @@ public class NotesDialog extends JFrame {
 
 		private void populateGuesses() {
 			comboBox.removeAllItems();
-			if(game.getHumanPlayer().getSeenWeapons().isEmpty()) comboBox.addItem("All Weapons Seen");
-			else for(Card c : game.getHumanPlayer().getSeenWeapons()) comboBox.addItem(c.getTitle());
+			if(game.getHumanPlayer().getSeenCards().isEmpty()) comboBox.addItem("All Weapons Seen");
+			else {
+				for(Card c : game.getHumanPlayer().getSeenCards()) {
+					if (c.getType() == CardType.WEAPON) {
+						comboBox.addItem(c.getTitle());
+					}
+				}
+			}
 		}
 
 		private class wGuessListener implements FocusListener {

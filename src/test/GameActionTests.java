@@ -19,22 +19,17 @@ public class GameActionTests {
 	private static ClueGame game;
 
 
-	public static void setGame(ClueGame game) {
-		GameActionTests.game = game;
-	}
-
-
 	@BeforeClass
 	public static void setUp() {
 		game = new ClueGame();
-		game.loadConfigFiles("data/card/character/characters.txt", "data/card/weapon/weapons.txt", "data/Players.txt");
+		game.loadConfigFiles("data/card/weapon/weapons.txt", "data/Players.txt");
 		game.dealCards();
 		game.getBoard().calcAdjacencies();
 	}
 	
 
 	@Test
-	// TEST MAKES SENSE
+	// TEST IS GOOD
 	//tests that player enters a room from a walkway when that room is in its target list
 	public void testUnvisitedRoomEntry() {
 		ComputerPlayer testPlayer = new ComputerPlayer("Bob", Color.WHITE, 4, 4, game);
@@ -43,23 +38,43 @@ public class GameActionTests {
 	}
 	
 	@Test
-	// TODO This test is incorrect.
-	//tests that a player will not enter the room it last visited
-	public void testIgnoreVisitedRoom(){
-		ComputerPlayer testPlayer = new ComputerPlayer("Bob", Color.WHITE, 4, 4, game);
-		testPlayer.setLastRoomVisited("Conservatory");
-		game.getBoard().startTargets(testPlayer.getRow(), testPlayer.getColumn(), 1);
-		assertTrue(testPlayer.pickLocation(game.getBoard().getTargets()) == game.getBoard().getCellAt(4, 3)
-				|| testPlayer.pickLocation(game.getBoard().getTargets()) == game.getBoard().getCellAt(4, 5)
-				|| testPlayer.pickLocation(game.getBoard().getTargets()) == game.getBoard().getCellAt(5, 4));
-		
+	// TEST IS GOOD
+	public void testTargetRandomSelectionWithVisitedRoom() {
+		ComputerPlayer player = new ComputerPlayer("Bob", Color.WHITE, 4, 4, game);
+		player.setLastRoomVisited('C');
+		// Pick a location with no rooms in target, just three targets
+		game.getBoard().startTargets(player.getRow(), player.getColumn(), 1);
+		int loc_4_3Tot = 0;
+		int loc_4_5Tot = 0;
+		int loc_5_4Tot = 0;
+		// Run the test 200 times
+		for (int i=0; i<200; i++) {
+			BoardCell selected = player.pickLocation(game.getBoard().getTargets());
+			if (selected == game.getBoard().getCellAt(4, 3))
+				loc_4_3Tot++;
+			else if (selected == game.getBoard().getCellAt(4, 5))
+				loc_4_5Tot++;
+			else if (selected == game.getBoard().getCellAt(5, 4))
+				loc_5_4Tot++;
+			else
+				fail("Invalid target selected");
+		}
+		// Ensure we have 200 total selections (fail should also ensure)
+		assertEquals(200, loc_4_3Tot + loc_4_5Tot + loc_5_4Tot);
+		// Ensure each target was selected more than once
+		assertTrue(loc_4_3Tot > 10);
+		assertTrue(loc_4_5Tot > 10);
+		assertTrue(loc_5_4Tot > 10);							
 	}
 	
+	
+	
 	@Test
+	// TEST IS GOOD
 	public void testTargetRandomSelection() {
-		ComputerPlayer player = new ComputerPlayer("Bob",Color.WHITE,14,0, game);
+		ComputerPlayer player = new ComputerPlayer("Bob", Color.WHITE, 14, 0, game);
 		// Pick a location with no rooms in target, just three targets
-		game.getBoard().startTargets(14, 0, 2);
+		game.getBoard().startTargets(player.getRow(), player.getColumn(), 2);
 		int loc_12_0Tot = 0;
 		int loc_14_2Tot = 0;
 		int loc_15_1Tot = 0;
@@ -83,7 +98,10 @@ public class GameActionTests {
 		assertTrue(loc_15_1Tot > 10);							
 	}
 	
+	/*
+	
 	@Test
+	// TODO Check this test
 	//player has one card in card to disprove a suggestion
 	public void testOneCardDisprove(){
 		Player p = new Player();
@@ -92,6 +110,7 @@ public class GameActionTests {
 	}
 	
 	@Test
+	// TODO Check this test
 	//player has two cards to disprove a suggestion but picks randomly
 	public void testTwoCardRandomDisprove(){
 		Player p = new Player();
@@ -114,6 +133,7 @@ public class GameActionTests {
 	}
 	
 	@Test
+	// TODO Check this test
 	// There are 3 players. Each player has a unique Card. 
 	// I will query each player in a certain order to prove the query stops
 	public void testQueryOrder() {
@@ -133,6 +153,7 @@ public class GameActionTests {
 	}
 	
 	@Test
+	// TODO Check this test
 	// Test that a player cannot query himself
 	public void testSelfQuery() {
 		ArrayList<Player> players = game.getPlayers();
@@ -144,6 +165,7 @@ public class GameActionTests {
 	}
 	
 	@Test
+	// TODO Check this test
 	// Test that a computer player makes a correct suggestion
 	public void testComputerCorrectSuggestion() {
 		ArrayList<ComputerPlayer> players = game.getComputerPlayers();
@@ -165,6 +187,7 @@ public class GameActionTests {
 	}
 	
 	@Test
+	// TODO Check this test
 	// Test that a computer player makes a suggestion randomly
 	public void testComputerRandomSuggestion() {
 		ArrayList<ComputerPlayer> players = game.getComputerPlayers();
@@ -195,4 +218,6 @@ public class GameActionTests {
 		assertTrue(g1 > 10);
 		assertTrue(g2 > 10);
 	}
+	
+	*/
 }

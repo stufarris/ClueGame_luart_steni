@@ -41,7 +41,7 @@ public class ControlFrame extends JFrame {
 
 	public ControlFrame() {
 		game = new ClueGame();
-		game.loadConfigFiles("data/card/character/characters.txt", "data/card/weapon/weapons.txt", "data/Players.txt");
+		game.loadConfigFiles("data/card/weapon/weapons.txt", "data/Players.txt");
 		game.getPlayers();
 		game.dealCards();
 		this.setSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));

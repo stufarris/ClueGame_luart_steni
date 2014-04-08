@@ -24,7 +24,7 @@ public class ClueGameTest {
 	@BeforeClass
 	public static void setUp() {
 		game = new ClueGame();
-		game.loadConfigFiles("data/card/character/characters.txt", "data/card/weapon/weapons.txt", "data/Players.txt");
+		game.loadConfigFiles("data/card/weapon/weapons.txt", "data/Players.txt");
 		game.dealCards();
 	}
 	
@@ -37,7 +37,7 @@ public class ClueGameTest {
 		assertTrue(players.contains(new ComputerPlayer("Storm Trooper", Color.GREEN, 15, 1, game)));
 		assertTrue(players.contains(new ComputerPlayer("Obi-Wan Kenobi", Color.CYAN, 19, 7, game)));
 		assertTrue(players.contains(new ComputerPlayer("Hans Solo", Color.ORANGE, 6, 5, game)));
-		assertTrue(players.contains(new HumanPlayer("Luke Skywalker", Color.RED, 6, 3, game)));
+		assertTrue(players.contains(new HumanPlayer("Luke Skywalker", Color.RED, 6, 3)));
 	}
 	
 	// Tests loading characters from the character file to insure they have the correct names and are PERSON cards

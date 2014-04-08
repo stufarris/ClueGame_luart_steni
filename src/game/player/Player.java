@@ -7,38 +7,24 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
+import game.ClueGame;
 import game.board.cell.BoardCell;
 import game.card.Card;
 
 public class Player {
-	private String id = "";
+	private String id;
 	private Color color;
-	private Set<Card> handOfCards;
+	private Set<Card> handOfCards = new HashSet<Card>();
+	private Set<Card> seenCards = new HashSet<Card>();
 
 	private int row;
 	private int column;
-	protected String lastRoomVisited = "\0";
-	
-	protected ArrayList<Card> seenCharacters;
-	protected ArrayList<Card> seenWeapons;
-	protected ArrayList<Card> seenRooms;
-	
-	public Player(){
-		this.handOfCards = new HashSet<Card>();
-		this.seenRooms = new ArrayList<Card>();
-		this.seenWeapons = new ArrayList<Card>();
-		this.seenCharacters = new ArrayList<Card>();
-	}
 	
 	public Player(String id, Color color, int row, int column) {
 		this.id = id;
 		this.color = color;
 		this.row = row;
 		this.column = column;
-		this.handOfCards = new HashSet<Card>();
-		this.seenRooms = new ArrayList<Card>();
-		this.seenWeapons = new ArrayList<Card>();
-		this.seenCharacters = new ArrayList<Card>();
 	}
 	
 	public Card disproveSuggestion(String character, String room, String weapon) {
@@ -53,23 +39,11 @@ public class Player {
 	}
 	
 	public void forgetCard(Card c) {
-		if(c.getType() == Card.CardType.PERSON) seenCharacters.remove(c);
-		else if(c.getType() == Card.CardType.WEAPON) seenWeapons.remove(c);
-		else if(c.getType() == Card.CardType.ROOM) seenRooms.remove(c);
+		seenCards.remove(c);
 	}
 	
 	public void seeCard(Card c) {
-		if(c.getType() == Card.CardType.PERSON && !seenCharacters.contains(c)) seenCharacters.add(c);
-		else if(c.getType() == Card.CardType.WEAPON && !seenWeapons.contains(c)) seenWeapons.add(c);
-		else if(c.getType() == Card.CardType.ROOM && !seenRooms.contains(c)) seenRooms.add(c);
-	}
-	
-	public String getLastRoomVisited() {
-		return lastRoomVisited;
-	}
-
-	public void setLastRoomVisited(String lastRoomVisited) {
-		this.lastRoomVisited = lastRoomVisited;
+		seenCards.add(c);
 	}
 	
 	public void giveCard(Card c) {
@@ -109,16 +83,8 @@ public class Player {
 		return column;
 	}
 	
-	public ArrayList<Card> getSeenCharacters() {
-		return seenCharacters;
-	}
-
-	public ArrayList<Card> getSeenWeapons() {
-		return seenWeapons;
-	}
-
-	public ArrayList<Card> getSeenRooms() {
-		return seenRooms;
+	public Set<Card> getSeenCards() {
+		return seenCards;
 	}
 	
 	public void draw(Graphics g, int x, int y, int width, int height){

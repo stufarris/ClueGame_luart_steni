@@ -77,15 +77,13 @@ public class ClueGame extends JPanel{
 		return currentPlayer;
 	}
 
-	public void loadConfigFiles(String characterFilename, String weaponFilename, String playerFilename) {
+	public void loadConfigFiles(String weaponFilename, String playerFilename) {
 		board = new Board("data/board/ClueLayout.csv", "data/board/ClueLegend.txt");
 		board.loadConfigFiles();
 		try {
 			loadRoomsFromBoard();
 			loadWeaponFile(weaponFilename);
-			//loadCharacterFile(characterFilename);
 			loadPlayerFile(playerFilename);
-			//humanPlayer = (new HumanPlayer("Human", Color.BLACK, HUMAN_START_ROW, HUMAN_START_COLUMN, this));
 		} catch(BadConfigFormatException e) {
 			e.printStackTrace();
 		} catch (FileNotFoundException e) {
@@ -114,17 +112,6 @@ public class ClueGame extends JPanel{
 			else addCard(new Card(line, Card.CardType.WEAPON));
 		}
 	}
-	
-	/*private void loadCharacterFile(String filename) throws BadConfigFormatException, FileNotFoundException{
-		Scanner in = new Scanner(new FileReader(filename));
-		String line = "";
-		
-		while(in.hasNextLine()) {
-			line = in.nextLine();
-			if(line == null) throw new BadConfigFormatException("Invalid Character in file " + filename);
-			else addCard(new Card(line, Card.CardType.PERSON));
-		}
-	}*/
 
 	private void loadRoomsFromBoard() {
 		Collection<String> in = board.getRooms().values();
@@ -156,7 +143,7 @@ public class ClueGame extends JPanel{
 			}
 			addCard(new Card(info[0], Card.CardType.PERSON));
 			if(count == 0){
-				humanPlayer = new HumanPlayer(info[0], color, Integer.parseInt(info[1]), Integer.parseInt(info[2]), this);
+				humanPlayer = new HumanPlayer(info[0], color, Integer.parseInt(info[1]), Integer.parseInt(info[2]));
 			}
 			else{
 				computerPlayers.add(new ComputerPlayer(info[0], color, Integer.parseInt(info[1]), Integer.parseInt(info[2]), this));
