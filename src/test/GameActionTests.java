@@ -18,6 +18,12 @@ public class GameActionTests {
 	
 	private static ClueGame game;
 
+
+	public static void setGame(ClueGame game) {
+		GameActionTests.game = game;
+	}
+
+
 	@BeforeClass
 	public static void setUp() {
 		game = new ClueGame();
@@ -28,17 +34,19 @@ public class GameActionTests {
 	
 
 	@Test
+	// TEST MAKES SENSE
 	//tests that player enters a room from a walkway when that room is in its target list
 	public void testUnvisitedRoomEntry() {
-		ComputerPlayer testPlayer = new ComputerPlayer("Bob",Color.WHITE,4,4, game);
+		ComputerPlayer testPlayer = new ComputerPlayer("Bob", Color.WHITE, 4, 4, game);
 		game.getBoard().startTargets(testPlayer.getRow(), testPlayer.getColumn(), 1);
 		assertEquals(testPlayer.pickLocation(game.getBoard().getTargets()), game.getBoard().getCellAt(4,3));		
 	}
 	
 	@Test
+	// TODO This test is incorrect.
 	//tests that a player will not enter the room it last visited
 	public void testIgnoreVisitedRoom(){
-		ComputerPlayer testPlayer = new ComputerPlayer("Bob",Color.WHITE,4,4, game);
+		ComputerPlayer testPlayer = new ComputerPlayer("Bob", Color.WHITE, 4, 4, game);
 		testPlayer.setLastRoomVisited("Conservatory");
 		game.getBoard().startTargets(testPlayer.getRow(), testPlayer.getColumn(), 1);
 		assertTrue(testPlayer.pickLocation(game.getBoard().getTargets()) == game.getBoard().getCellAt(4, 3)
