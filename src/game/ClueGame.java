@@ -67,9 +67,9 @@ public class ClueGame extends JPanel{
 		try {
 			loadRoomsFromBoard();
 			loadWeaponFile(weaponFilename);
-			loadCharacterFile(characterFilename);
+			//loadCharacterFile(characterFilename);
 			loadPlayerFile(playerFilename);
-			humanPlayer = (new HumanPlayer("Human", Color.BLACK, HUMAN_START_ROW, HUMAN_START_COLUMN, this));
+			//humanPlayer = (new HumanPlayer("Human", Color.BLACK, HUMAN_START_ROW, HUMAN_START_COLUMN, this));
 		} catch(BadConfigFormatException e) {
 			e.printStackTrace();
 		} catch (FileNotFoundException e) {
@@ -99,7 +99,7 @@ public class ClueGame extends JPanel{
 		}
 	}
 	
-	private void loadCharacterFile(String filename) throws BadConfigFormatException, FileNotFoundException{
+	/*private void loadCharacterFile(String filename) throws BadConfigFormatException, FileNotFoundException{
 		Scanner in = new Scanner(new FileReader(filename));
 		String line = "";
 		
@@ -108,7 +108,7 @@ public class ClueGame extends JPanel{
 			if(line == null) throw new BadConfigFormatException("Invalid Character in file " + filename);
 			else addCard(new Card(line, Card.CardType.PERSON));
 		}
-	}
+	}*/
 
 	private void loadRoomsFromBoard() {
 		Collection<String> in = board.getRooms().values();
@@ -120,6 +120,7 @@ public class ClueGame extends JPanel{
 	private void loadPlayerFile(String filename) throws NumberFormatException, IOException, BadConfigFormatException {
 		BufferedReader input = new BufferedReader(new FileReader(filename));
 		String line = "";
+		int count = 0;
 				
 		while((line  = input.readLine()) != null) {
 			String[] info = line.split(", *");
@@ -137,7 +138,14 @@ public class ClueGame extends JPanel{
 			} catch (Exception e) {
 			    color = null; // Not defined
 			}
-			computerPlayers.add(new ComputerPlayer(info[0], color, Integer.parseInt(info[1]), Integer.parseInt(info[2]), this));
+			addCard(new Card(info[0], Card.CardType.PERSON));
+			if(count == 0){
+				humanPlayer = new HumanPlayer(info[0], color, Integer.parseInt(info[1]), Integer.parseInt(info[2]), this);
+			}
+			else{
+				computerPlayers.add(new ComputerPlayer(info[0], color, Integer.parseInt(info[1]), Integer.parseInt(info[2]), this));
+			}
+			count++;
 		}
 	}
 	

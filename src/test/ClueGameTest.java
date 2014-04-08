@@ -30,26 +30,25 @@ public class ClueGameTest {
 	
 	// Tests to insure all the players are loaded and have the correct properties
 	@Test
-	public void testLoadingPeople() {
+	public void testLoadingPlayers() {
 		ArrayList<Player> players = game.getPlayers();
-		assertTrue(players.contains(new ComputerPlayer("Garrett", Color.RED, 6, 3, game)));
-		assertTrue(players.contains(new ComputerPlayer("Stuart", Color.BLUE, 1, 5, game)));
-		assertTrue(players.contains(new ComputerPlayer("Christian", Color.GREEN, 15, 1, game)));
-		assertTrue(players.contains(new ComputerPlayer("Espen", Color.CYAN, 19, 7, game)));
-		assertTrue(players.contains(new ComputerPlayer("Justin", Color.ORANGE, 6, 5, game)));
-		assertTrue(players.contains(new HumanPlayer("Human", Color.BLACK, 19, 16, game)));
+	
+		assertTrue(players.contains(new ComputerPlayer("Darth Vader", Color.BLUE, 1, 5, game)));
+		assertTrue(players.contains(new ComputerPlayer("Storm Trooper", Color.GREEN, 15, 1, game)));
+		assertTrue(players.contains(new ComputerPlayer("Obi-Wan Kenobi", Color.CYAN, 19, 7, game)));
+		assertTrue(players.contains(new ComputerPlayer("Hans Solo", Color.ORANGE, 6, 5, game)));
+		assertTrue(players.contains(new HumanPlayer("Luke Skywalker", Color.RED, 6, 3, game)));
 	}
 	
 	// Tests loading characters from the character file to insure they have the correct names and are PERSON cards
 	@Test
-	public void testLoadingCharacters() {
+	public void testLoadingPlayerCards() {
 		Set<Card> cards = game.getCards();
 		assertTrue(cards.contains(new Card("Luke Skywalker", Card.CardType.PERSON)));
 		assertTrue(cards.contains(new Card("Darth Vader", Card.CardType.PERSON)));
 		assertTrue(cards.contains(new Card("Storm Trooper", Card.CardType.PERSON)));
 		assertTrue(cards.contains(new Card("Obi-Wan Kenobi", Card.CardType.PERSON)));
 		assertTrue(cards.contains(new Card("Hans Solo", Card.CardType.PERSON)));
-		assertTrue(cards.contains(new Card("Chewbacca", Card.CardType.PERSON)));
 	}
 	
 	// Tests loading weapons from the weapon file to insure they have the correct names and are WEAPON cards
@@ -78,7 +77,7 @@ public class ClueGameTest {
 	// This test checks to make sure the deck of cards is the correct size
 	@Test
 	public void testCompleteDeck() {
-		Assert.assertEquals(game.getCards().size(), 23);
+		Assert.assertEquals(game.getCards().size(), 22);
 	}
 	
 	// This test iterates through the deck of cards and checks that only one player has the card, If the card has not been dealt or been redealt the test fails

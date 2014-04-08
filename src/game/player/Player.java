@@ -32,6 +32,9 @@ public class Player {
 		this.row = row;
 		this.column = column;
 		this.handOfCards = new HashSet<Card>();
+		this.seenRooms = new ArrayList<Card>();
+		this.seenWeapons = new ArrayList<Card>();
+		this.seenCharacters = new ArrayList<Card>();
 	}
 	
 	public Card disproveSuggestion(String character, String room, String weapon) {

@@ -1,5 +1,5 @@
-Garrett, 6, 3, RED
-Stuart, 1, 5, BLUE
-Christian, 15, 1, GREEN
-Espen, 19, 7, CYAN
-Justin, 6, 5, ORANGE
+Luke Skywalker, 6, 3, RED
+Darth Vader, 1, 5, BLUE
+Storm Trooper, 15, 1, GREEN
+Obi-Wan Kenobi, 19, 7, CYAN
+Hans Solo, 6, 5, ORANGE
