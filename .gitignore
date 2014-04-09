@@ -18,6 +18,7 @@ local.properties
 
 # Error log
 errors.txt
+log.txt
 
 # External tool builders
 .externalToolBuilders/
