@@ -34,9 +34,9 @@ public class ClueGame extends JPanel{
 
 	private static final long serialVersionUID = 7898999844979750592L;
 	private Set<Card> cards;
-	private Set<Card> weapons;
-	private Set<Card> rooms;
-	private Set<Card> characters;
+	private Set<Card> weaponCards;
+	private Set<Card> roomCards;
+	private Set<Card> playerCards;
 	
 	private ArrayList<ComputerPlayer> computerPlayers;
 	private HumanPlayer humanPlayer;
@@ -67,9 +67,9 @@ public class ClueGame extends JPanel{
 		cards = new HashSet<Card>();
 		computerPlayers = new ArrayList<ComputerPlayer>();
 		players = new ArrayList<Player>();
-		weapons = new HashSet<Card>();
-		rooms = new HashSet<Card>();
-		characters = new HashSet<Card>();
+		weaponCards = new HashSet<Card>();
+		roomCards = new HashSet<Card>();
+		playerCards = new HashSet<Card>();
 		currentPlayer = null;
 	}
 	
@@ -96,9 +96,9 @@ public class ClueGame extends JPanel{
 	}
 	
 	private void addCard(Card c) {
-		if(c.getType() == Card.CardType.WEAPON) weapons.add(c);
-		else if(c.getType() == Card.CardType.PERSON) characters.add(c);
-		else if(c.getType() == Card.CardType.ROOM) rooms.add(c);
+		if(c.getType() == Card.CardType.WEAPON) weaponCards.add(c);
+		else if(c.getType() == Card.CardType.PERSON) playerCards.add(c);
+		else if(c.getType() == Card.CardType.ROOM) roomCards.add(c);
 		cards.add(c);
 	}
 	
@@ -174,26 +174,18 @@ public class ClueGame extends JPanel{
 	}
 	
 	public Card handleSuggestion(String person, String room, String weapon, Player accusingPerson) {
-		Card c1 = new Card(person, Card.CardType.PERSON);
-		Card c2 = new Card(room, Card.CardType.ROOM);
-		Card c3 = new Card(weapon, Card.CardType.WEAPON);
+		Card c = null;
 		ArrayList<Player> players = this.getPlayers();
-		ArrayList<Card> possibleResponse = new ArrayList<Card>();
-		int accuser = players.indexOf(accusingPerson);
-		for(int i = (accuser + 1) % players.size(); i != accuser; i = (i + 1) % players.size()) {
-			if(players.get(i).getCards().contains(c1)) {
-				accusingPerson.seeCard(c1);
-				possibleResponse.add(c1);
+		int accuserIndex = players.indexOf(accusingPerson);
+		int currentIndex = accuserIndex + 1;
+		if (currentIndex > players.size() - 1) currentIndex = 0;
+		while (currentIndex != accuserIndex) {
+			c = players.get(currentIndex).disproveSuggestion(person, room, weapon);
+			if (c != null) {
+				return c;
 			}
-			if(players.get(i).getCards().contains(c2)) {
-				accusingPerson.seeCard(c2);
-				possibleResponse.add(c2);
-			}
-			if(players.get(i).getCards().contains(c3)) {
-				accusingPerson.seeCard(c3);
-				possibleResponse.add(c3);
-			}
-			if(possibleResponse.size() > 0) return(possibleResponse.get(new Random().nextInt(possibleResponse.size())));
+			currentIndex++;
+			if (currentIndex > players.size() - 1) currentIndex = 0;
 		}
 		return null;
 		
@@ -230,16 +222,16 @@ public class ClueGame extends JPanel{
 		return board;
 	}
 	
-	public Set<Card> getWeapons() {
-		return weapons;
+	public Set<Card> getWeaponCards() {
+		return weaponCards;
 	}
 
-	public Set<Card> getRooms() {
-		return rooms;
+	public Set<Card> getRoomCards() {
+		return roomCards;
 	}
 
-	public Set<Card> getCharacters() {
-		return characters;
+	public Set<Card> getPlayerCards() {
+		return playerCards;
 	}
 	
 	@Override

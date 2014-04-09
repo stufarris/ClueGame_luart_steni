@@ -53,7 +53,7 @@ public class NotesDialog extends JFrame {
 			this.game = g;
 			this.setBorder(new TitledBorder (new EtchedBorder(), "People"));
 			this.setLayout(new GridLayout(3,2));
-			for(Card c : game.getCharacters()){
+			for(Card c : game.getPlayerCards()){
 				JCheckBox cb = new JCheckBox(c.getTitle());
 				cb.addActionListener(new PeopleListener());
 				if(game.getHumanPlayer().getSeenCards().contains(c)) cb.setSelected(true);
@@ -117,7 +117,7 @@ public class NotesDialog extends JFrame {
 			this.game = g;
 			this.setBorder(new TitledBorder (new EtchedBorder(), "Rooms"));
 			this.setLayout(new GridLayout(3,2));
-			for(Card c : game.getRooms()){
+			for(Card c : game.getRoomCards()){
 				JCheckBox cb = new JCheckBox(c.getTitle());
 				cb.addActionListener(new RoomListener());
 				if(game.getHumanPlayer().getSeenCards().contains(c)) cb.setSelected(true);
@@ -181,7 +181,7 @@ public class NotesDialog extends JFrame {
 			this.game = g;
 			this.setBorder(new TitledBorder (new EtchedBorder(), "Weapons"));
 			this.setLayout(new GridLayout(3,2));
-			for(Card c : game.getWeapons()){
+			for(Card c : game.getWeaponCards()){
 				JCheckBox cb = new JCheckBox(c.getTitle());
 				cb.addActionListener(new WeaponListener());
 				if(game.getHumanPlayer().getSeenCards().contains(c)) cb.setSelected(true);

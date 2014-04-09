@@ -14,10 +14,12 @@ import game.player.Player;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import game.Solution;
+
 public class GameActionTests {
 	
 	private static ClueGame game;
-
+	private static Card white, mustard, knife, rope, study, library;
 
 	@BeforeClass
 	public static void setUp() {
@@ -25,6 +27,14 @@ public class GameActionTests {
 		game.loadConfigFiles("data/card/weapon/weapons.txt", "data/Players.txt");
 		game.dealCards();
 		game.getBoard().calcAdjacencies();
+		
+		
+		white = new Card("Mrs. White", Card.CardType.PERSON);
+		mustard = new Card("Colonel Mustard", Card.CardType.PERSON);
+		knife = new Card("Knife", Card.CardType.WEAPON);
+		rope = new Card("Rope", Card.CardType.WEAPON);
+		study = new Card("Study", Card.CardType.ROOM);
+		library = new Card("Library", Card.CardType.ROOM);
 	}
 	
 
@@ -98,126 +108,183 @@ public class GameActionTests {
 		assertTrue(loc_15_1Tot > 10);							
 	}
 	
-	/*
-	
 	@Test
-	// TODO Check this test
-	//player has one card in card to disprove a suggestion
-	public void testOneCardDisprove(){
-		Player p = new Player();
-		p.giveCard(new Card("gun",Card.CardType.WEAPON));
-		assertEquals(p.disproveSuggestion("joe", "bedroom", "gun"), new Card("gun",Card.CardType.WEAPON));
+	// TEST IS GOOD
+	public void testDisproveOnePlayerOneMatch() {
+		
+		// Setup
+		Card c = null;
+		ComputerPlayer testPlayer = new ComputerPlayer("test", Color.WHITE, 0, 0, game);
+		testPlayer.giveCard(rope);
+		testPlayer.giveCard(knife);
+		testPlayer.giveCard(white);
+		testPlayer.giveCard(mustard);
+		testPlayer.giveCard(study);
+		testPlayer.giveCard(library);
+		
+		// Test a match with a weapon
+		c = testPlayer.disproveSuggestion("g", "g", "Rope");
+		assertEquals("Rope", c.getTitle());
+		
+		// Match with person
+		c = testPlayer.disproveSuggestion("Mrs. White", "g", "g");
+		assertEquals("Mrs. White", c.getTitle());
+		
+		// Match with room
+		c = testPlayer.disproveSuggestion("g", "Study", "g");
+		assertEquals("Study", c.getTitle());
+		
+		// Returns null
+		c = testPlayer.disproveSuggestion("g", "g", "g");
+		assertEquals(null, c);
 	}
 	
 	@Test
-	// TODO Check this test
-	//player has two cards to disprove a suggestion but picks randomly
-	public void testTwoCardRandomDisprove(){
-		Player p = new Player();
-		p.giveCard(new Card("gun",Card.CardType.WEAPON));
-		p.giveCard(new Card("gunroom",Card.CardType.ROOM));
-		int gunCount = 0;
-		int gunRoomCount = 0;
-		for (int i=0; i<100; i++) {
-			Card selected = p.disproveSuggestion("joe", "gunroom", "gun");
-			if (selected.equals(new Card("gun",Card.CardType.WEAPON)))
-				gunCount++;
-			else if (selected.equals(new Card("gunroom",Card.CardType.ROOM)))
-				gunRoomCount++;
+	// TEST IS GOOD
+	public void testDisproveOnePlayerMultipleMatches() {
+		
+		// Setup
+		Card c = null;
+		ComputerPlayer testPlayer = new ComputerPlayer("test", Color.WHITE, 0, 0, game);
+		testPlayer.getCards().add(rope);
+		testPlayer.getCards().add(knife);
+		testPlayer.getCards().add(white);
+		testPlayer.getCards().add(mustard);
+		testPlayer.getCards().add(study);
+		testPlayer.getCards().add(library);
+		
+		int whiteTot = 0;
+		int studyTot = 0;
+		int ropeTot = 0;
+		
+		// loop to ensure a random card is selected
+		for (int i=0; i<200; i++) {
+			c = testPlayer.disproveSuggestion("Mrs. White", "Study", "Rope");
+			if (c.getTitle().equals("Mrs. White"))
+				whiteTot++;
+			else if (c.getTitle().equals("Study"))
+				studyTot++;
+			else if (c.getTitle().equals("Rope"))
+				ropeTot++;
+			else
+				fail("Invalid target selected");
 		}
-		// Ensure we have 100 total selections (fail should also ensure)
-		assertEquals(100, gunCount + gunRoomCount);
-		// Ensure each target was selected more than once
-		assertTrue(gunCount > 10);
-		assertTrue(gunRoomCount > 10);
+		
+		
+		assertTrue(whiteTot > 10);
+		assertTrue(studyTot > 10);
+		assertTrue(ropeTot > 10);
 	}
 	
 	@Test
-	// TODO Check this test
-	// There are 3 players. Each player has a unique Card. 
-	// I will query each player in a certain order to prove the query stops
-	public void testQueryOrder() {
-		ArrayList<Player> players = game.getPlayers();
-		Card gunroom = new Card("gunroom", Card.CardType.ROOM);
-		Card gun = new Card("gun", Card.CardType.WEAPON);
-		Card gunner = new Card("gunner", Card.CardType.PERSON);
-		players.get(1).giveCard(gunroom);
-		players.get(2).giveCard(gun);
-		players.get(3).giveCard(gunner);
+	// TEST IS GOOD
+	public void testAllPlayersQueried(){
 		
-		// Tests that players are queried in a certain order
-		assertEquals(gunroom, game.handleSuggestion("gunner", "gunroom", "gun", players.get(0)));
-		assertEquals(gun, game.handleSuggestion("gunner", "null", "gun", players.get(0)));
-		assertEquals(gunner, game.handleSuggestion("gunner", "null", "null", players.get(0)));
+		Card c = null;
+		game.getHumanPlayer().getCards().add(rope);
+		game.getComputerPlayers().get(0).getCards().add(knife);
+		game.getComputerPlayers().get(1).getCards().add(white);
+		game.getComputerPlayers().get(2).getCards().add(mustard);
+		game.getComputerPlayers().get(3).getCards().add(study);
 		
-	}
-	
-	@Test
-	// TODO Check this test
-	// Test that a player cannot query himself
-	public void testSelfQuery() {
-		ArrayList<Player> players = game.getPlayers();
-		Card gunroom = new Card("gunroom", Card.CardType.ROOM);
-		players.get(0).giveCard(gunroom);
+		// Ensure null
+		c = game.handleSuggestion("g", "g", "g", game.getHumanPlayer());
+		assertEquals(null, c);
 		
-		// Tests that players are queried in a certain order
-		assertTrue(null == game.handleSuggestion("gunner", "gunroom", "gun", players.get(0)));
-	}
-	
-	@Test
-	// TODO Check this test
-	// Test that a computer player makes a correct suggestion
-	public void testComputerCorrectSuggestion() {
-		ArrayList<ComputerPlayer> players = game.getComputerPlayers();
+		// Test for human
+		c = game.handleSuggestion("g", "g", "Rope", game.getComputerPlayers().get(0));
+		assertEquals("Rope", c.getTitle());
 		
-		// Remove all possible weapons
-		for(Card c : game.getWeapons()) {
-			players.get(0).forgetCard(c);
-		}
-		players.get(0).getSeenWeapons().add(new ArrayList<Card>(game.getWeapons()).get(0));
-		for(Card c : game.getCharacters()) {
-			players.get(0).seeCard(c);
-		}
-		players.get(0).getSeenCharacters().add(new ArrayList<Card>(game.getCharacters()).get(0));
+		// Person suggesting is the only one that can disprove it
+		c = game.handleSuggestion("g", "g", "Knife", game.getComputerPlayers().get(0));
+		assertEquals(null, c);	
 		
-		String[] sug = players.get(0).createSuggestion();
-		assertEquals(sug[0], new ArrayList<Card>(game.getCharacters()).get(0).getTitle());
-		assertEquals(sug[1], players.get(0).getLastRoomVisited());
-		assertEquals(sug[2], new ArrayList<Card>(game.getWeapons()).get(0).getTitle());
-	}
-	
-	@Test
-	// TODO Check this test
-	// Test that a computer player makes a suggestion randomly
-	public void testComputerRandomSuggestion() {
-		ArrayList<ComputerPlayer> players = game.getComputerPlayers();
+		// Two possible answers, make sure first is returned
+		c = game.handleSuggestion("Mrs. White", "g", "Knife", game.getComputerPlayers().get(3));
+		assertEquals("Knife", c.getTitle());
 		
-		for(Card c : game.getWeapons()) {
-			players.get(0).seeCard(c);
-		}
-		players.get(0).getSeenWeapons().add(new ArrayList<Card>(game.getWeapons()).get(0));
-		players.get(0).getSeenWeapons().add(new ArrayList<Card>(game.getWeapons()).get(1));
-		for(Card c : game.getCharacters()) {
-			players.get(0).seeCard(c);
-		}
-		players.get(0).getSeenCharacters().add(new ArrayList<Card>(game.getCharacters()).get(0));
-		players.get(0).getSeenCharacters().add(new ArrayList<Card>(game.getCharacters()).get(1));
+		// Make sure all are queried
+		c = game.handleSuggestion("g", "Library", "g", game.getHumanPlayer());
+		assertEquals("Library", c.getTitle());
+		
+		
 
-		int g1 = 0;
-		int g2 = 0;
-		for (int i=0; i<100; i++) {
-			String[] sug = ((ComputerPlayer)(players.get(0))).createSuggestion();
-			if (sug[0] == new ArrayList<Card>(game.getCharacters()).get(0).getTitle())
-				g1++;
-			else if (sug[0] == new ArrayList<Card>(game.getCharacters()).get(1).getTitle())
-				g2++;
-		}
-		// Ensure we have 100 total selections (fail should also ensure)
-		assertEquals(100, g1 + g2);
-		// Ensure each target was selected more than once
-		assertTrue(g1 > 10);
-		assertTrue(g2 > 10);
 	}
 	
-	*/
+	@Test
+	// TEST IS GOOD
+	public void testCreateSuggestionOnlyOnePossible() {
+		ComputerPlayer testPlayer = new ComputerPlayer("test", Color.WHITE, 15, 18, game);
+		ArrayList<Card> tempCards = new ArrayList<Card>(game.getPlayerCards());
+		
+		for (int i = 1; i < tempCards.size(); i++) {
+			testPlayer.seeCard(tempCards.get(i));
+		}
+		
+		String suggestionPerson = tempCards.get(0).getTitle();
+		
+		tempCards.clear();
+		tempCards = new ArrayList<Card>(game.getWeaponCards());
+		for (int i = 1; i < tempCards.size(); i++) {
+			testPlayer.seeCard(tempCards.get(i));
+		}
+		
+		String suggestionWeapon = tempCards.get(0).getTitle();
+		
+		Solution s = testPlayer.createSuggestion(game.getPlayerCards(), game.getWeaponCards());
+		
+		assertEquals(suggestionPerson, s.getPerson());
+		assertEquals(suggestionWeapon, s.getWeapon());
+		assertEquals("Lounge", s.getRoom());
+		
+	}
+	
+	@Test
+	public void testCreateSuggestionLotsPossible() {
+		ComputerPlayer testPlayer = new ComputerPlayer("test", Color.WHITE, 15, 18, game);
+		ArrayList<Card> tempCards = new ArrayList<Card>(game.getPlayerCards());
+		
+		for (int i = 2; i < tempCards.size(); i++) {
+			testPlayer.seeCard(tempCards.get(i));
+		}
+		
+		String suggestionPerson1 = tempCards.get(0).getTitle();
+		String suggestionPerson2 = tempCards.get(1).getTitle();
+		
+		tempCards.clear();
+		tempCards = new ArrayList<Card>(game.getWeaponCards());
+		for (int i = 2; i < tempCards.size(); i++) {
+			testPlayer.seeCard(tempCards.get(i));
+		}
+		
+		String suggestionWeapon1 = tempCards.get(0).getTitle();
+		String suggestionWeapon2 = tempCards.get(1).getTitle();
+		
+		int p1Tot = 0;
+		int p2Tot = 0;
+		int w1Tot = 0;
+		int w2Tot = 0;
+		Solution s = null;
+		
+		for (int i = 0; i < 200; i++) {
+			s = testPlayer.createSuggestion(game.getPlayerCards(), game.getWeaponCards());	
+			if (s.getPerson().equals(suggestionPerson1))
+				p1Tot++;
+			else if (s.getPerson().equals(suggestionPerson2))
+				p2Tot++;
+			else
+				fail("Invalid suggestion");
+			if (s.getWeapon().equals(suggestionWeapon1))
+				w1Tot++;
+			else if (s.getWeapon().equals(suggestionWeapon2))
+				w2Tot++;
+			else
+				fail("Invalid suggestion");
+		}
+		
+		assertTrue(p1Tot > 10);
+		assertTrue(p2Tot > 10);
+		assertTrue(w1Tot > 10);
+		assertTrue(w2Tot > 10);
+	}
 }

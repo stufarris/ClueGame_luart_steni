@@ -27,15 +27,16 @@ public class Player {
 		this.column = column;
 	}
 	
-	public Card disproveSuggestion(String character, String room, String weapon) {
-		Card p = new Card(character, Card.CardType.PERSON);
+	public Card disproveSuggestion(String person, String room, String weapon) {
+		Card p = new Card(person, Card.CardType.PERSON);
 		Card r = new Card(room, Card.CardType.ROOM);
 		Card w = new Card(weapon, Card.CardType.WEAPON);
 		ArrayList<Card> buffer = new ArrayList<Card>();
 		if(handOfCards.contains(p)) buffer.add(p);
 		if(handOfCards.contains(r)) buffer.add(r);
 		if(handOfCards.contains(w)) buffer.add(w);
-		return buffer.get(new Random().nextInt(buffer.size()));
+		if (buffer.size() > 0) return buffer.get(new Random().nextInt(buffer.size()));
+		return null;
 	}
 	
 	public void forgetCard(Card c) {

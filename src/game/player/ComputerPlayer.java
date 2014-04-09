@@ -50,10 +50,13 @@ public class ComputerPlayer extends Player {
 	}
 	
 	
-	public Solution createSuggestion(ArrayList<Card> playerCards, ArrayList<Card> weaponCards) {
+	public Solution createSuggestion(Set<Card> playerCards, Set<Card> weaponCards) {
 		Solution s = null;
 		ArrayList<Card> tempPlayers = new ArrayList<Card>(playerCards);
 		ArrayList<Card> tempWeapons = new ArrayList<Card>(weaponCards);
+		
+		Card suggestionPlayer;
+		Card suggestionWeapon;
 		
 		for (Card c : super.getSeenCards()) {
 			tempPlayers.remove(c);
@@ -62,8 +65,18 @@ public class ComputerPlayer extends Player {
 		
 		RoomCell r = game.getBoard().getRoomCellAt(game.getBoard().calcIndex(this.getRow(), this.getColumn()));
 		
-		s = new Solution(tempPlayers.get(new Random().nextInt(tempPlayers.size())).getTitle(),
-				tempWeapons.get(new Random().nextInt(tempWeapons.size())).getTitle(),
+		if (tempPlayers.isEmpty()) {
+			suggestionPlayer = null;
+		} else {
+			suggestionPlayer = tempPlayers.get(new Random().nextInt(tempPlayers.size()));
+		}
+		if (tempWeapons.isEmpty()) {
+			suggestionWeapon = null;
+		} else {
+			suggestionWeapon = tempWeapons.get(new Random().nextInt(tempWeapons.size()));
+		}
+		
+		s = new Solution(suggestionPlayer.getTitle(), suggestionWeapon.getTitle(),
 				game.getBoard().getRooms().get(r.getInitial()));
 		
 		return s;
