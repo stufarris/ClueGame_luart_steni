@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.HashSet;
+import java.util.Set;
 
 import game.ClueGame;
 import game.card.Card;
@@ -68,7 +70,7 @@ public class NotesDialog extends JFrame {
 				JCheckBox cb = (JCheckBox)a.getSource();
 				if(cb.isSelected()) game.getHumanPlayer().seeCard(new Card(cb.getText(), Card.CardType.PERSON));
 				else game.getHumanPlayer().forgetCard(new Card(cb.getText(), Card.CardType.PERSON));
-				personGuessPanel.populateGuesses();
+				populateGuesses(personGuessPanel.getBox(), getNotSeenCards(game), CardType.PERSON);
 			}
 		}
 	}
@@ -83,28 +85,20 @@ public class NotesDialog extends JFrame {
 			comboBox = new JComboBox<String>();
 			this.add(comboBox);
 			this.addFocusListener(new pGuessListener());
-			populateGuesses();
-		}
-
-		private void populateGuesses() {
-			comboBox.removeAllItems();
-			if(game.getHumanPlayer().getSeenCards().isEmpty()) comboBox.addItem("Everyone Seen");
-			else {
-				for(Card c : game.getHumanPlayer().getSeenCards()) {
-					if (c.getType() == CardType.PERSON) {
-						comboBox.addItem(c.getTitle());
-					}
-				}
-			}
+			populateGuesses(comboBox, getNotSeenCards(game), CardType.PERSON);
 		}
 
 		private class pGuessListener implements FocusListener {
 			@Override
 			public void focusGained(FocusEvent e) {
-				populateGuesses();
+				populateGuesses(comboBox, getNotSeenCards(game), CardType.PERSON);
 			}
 			@Override
 			public void focusLost(FocusEvent e) {}
+		}
+		
+		public JComboBox<String> getBox() {
+			return this.comboBox;
 		}
 	}
 
@@ -118,11 +112,13 @@ public class NotesDialog extends JFrame {
 			this.setBorder(new TitledBorder (new EtchedBorder(), "Rooms"));
 			this.setLayout(new GridLayout(3,2));
 			for(Card c : game.getRoomCards()){
-				JCheckBox cb = new JCheckBox(c.getTitle());
-				cb.addActionListener(new RoomListener());
-				if(game.getHumanPlayer().getSeenCards().contains(c)) cb.setSelected(true);
-				else cb.setSelected(false);
-				this.add(cb);
+				if (!c.getTitle().equalsIgnoreCase("walkway") && !c.getTitle().equalsIgnoreCase("closet")) {
+					JCheckBox cb = new JCheckBox(c.getTitle());
+					cb.addActionListener(new RoomListener());
+					if(game.getHumanPlayer().getSeenCards().contains(c)) cb.setSelected(true);
+					else cb.setSelected(false);
+					this.add(cb);
+				}
 			}
 		}
 
@@ -132,7 +128,7 @@ public class NotesDialog extends JFrame {
 				JCheckBox cb = (JCheckBox)a.getSource();
 				if(cb.isSelected()) game.getHumanPlayer().seeCard(new Card(cb.getText(), Card.CardType.ROOM));
 				else game.getHumanPlayer().forgetCard(new Card(cb.getText(), Card.CardType.ROOM));
-				roomGuessPanel.populateGuesses();
+				populateGuesses(roomGuessPanel.getBox(), getNotSeenCards(game), CardType.ROOM);
 			}
 		}
 	}
@@ -147,28 +143,20 @@ public class NotesDialog extends JFrame {
 			comboBox = new JComboBox<String>();
 			this.addFocusListener(new rGuessListener());
 			this.add(comboBox);
-			populateGuesses();
-		}
-
-		public void populateGuesses() {
-			comboBox.removeAllItems();
-			if(game.getHumanPlayer().getSeenCards().isEmpty()) comboBox.addItem("All Rooms Seen");
-			else {
-				for(Card c : game.getHumanPlayer().getSeenCards()) {
-					if (c.getType() == CardType.ROOM) {	
-						comboBox.addItem(c.getTitle());
-					}
-				}
-			}
+			populateGuesses(comboBox, getNotSeenCards(game), CardType.ROOM);
 		}
 
 		private class rGuessListener implements FocusListener {
 			@Override
 			public void focusGained(FocusEvent e) {
-				populateGuesses();
+				populateGuesses(comboBox, getNotSeenCards(game), CardType.ROOM);
 			}
 			@Override
 			public void focusLost(FocusEvent e) {}
+		}
+		
+		public JComboBox<String> getBox() {
+			return this.comboBox;
 		}
 	}
 
@@ -196,7 +184,7 @@ public class NotesDialog extends JFrame {
 				JCheckBox cb = (JCheckBox)a.getSource();
 				if(cb.isSelected()) game.getHumanPlayer().seeCard(new Card(cb.getText(), Card.CardType.WEAPON));
 				else game.getHumanPlayer().forgetCard(new Card(cb.getText(), Card.CardType.WEAPON));
-				weaponGuessPanel.populateGuesses();
+				populateGuesses(weaponGuessPanel.getBox(), getNotSeenCards(game), CardType.WEAPON);
 			}
 		}
 	}
@@ -207,32 +195,44 @@ public class NotesDialog extends JFrame {
 
 		public WeaponGuessPanel(ClueGame g) {
 			game = g;
-			this.setBorder(new TitledBorder (new EtchedBorder(), "Room Guess"));
+			this.setBorder(new TitledBorder (new EtchedBorder(), "Weapon Guess"));
 			comboBox = new JComboBox<String>();
 			this.addFocusListener(new wGuessListener());
 			this.add(comboBox);
-			populateGuesses();
-		}
-
-		private void populateGuesses() {
-			comboBox.removeAllItems();
-			if(game.getHumanPlayer().getSeenCards().isEmpty()) comboBox.addItem("All Weapons Seen");
-			else {
-				for(Card c : game.getHumanPlayer().getSeenCards()) {
-					if (c.getType() == CardType.WEAPON) {
-						comboBox.addItem(c.getTitle());
-					}
-				}
-			}
+			populateGuesses(comboBox, getNotSeenCards(game), CardType.WEAPON);
 		}
 
 		private class wGuessListener implements FocusListener {
 			@Override
 			public void focusGained(FocusEvent e) {
-				populateGuesses();
+				populateGuesses(comboBox, getNotSeenCards(game), CardType.WEAPON);
 			}
 			@Override
 			public void focusLost(FocusEvent e) {}
 		}
+		
+		public JComboBox<String> getBox() {
+			return this.comboBox;
+		}
+	}
+	
+	public void populateGuesses(JComboBox<String> box, Set<Card> cards, CardType type) {
+		box.removeAllItems();
+		if(cards.isEmpty()) box.addItem("All Seen");
+		else {
+			for(Card c : cards) {
+				if (c.getType() == type) {
+					if (!c.getTitle().equalsIgnoreCase("walkway") && !c.getTitle().equalsIgnoreCase("closet")) {
+						box.addItem(c.getTitle());
+					}
+				}
+			}
+		}
+	}
+	
+	public Set<Card> getNotSeenCards(ClueGame game) {
+		Set<Card> notSeenCards = new HashSet<Card>(game.getCards());
+		notSeenCards.removeAll(game.getHumanPlayer().getSeenCards());
+		return notSeenCards;
 	}
 }
