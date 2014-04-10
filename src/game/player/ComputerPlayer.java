@@ -21,9 +21,12 @@ public class ComputerPlayer extends Player {
 	private char lastRoomVisited;
 	private ClueGame game;
 	
+	private Boolean readyToAccuse;
+	
 	public ComputerPlayer(String id, Color color, int row, int column, ClueGame game) {
 		super(id, color, row, column);
 		this.game = game;
+		readyToAccuse = false;
 	}
 	
 	public BoardCell pickLocation(Set<BoardCell> targets) {
@@ -89,5 +92,14 @@ public class ComputerPlayer extends Player {
 	public void setLastRoomVisited(char lastRoomVisited) {
 		this.lastRoomVisited = lastRoomVisited;
 	}
+
+	public Boolean getReadyToAccuse() {
+		return readyToAccuse;
+	}
+
+	public void setReadyToAccuse(Boolean readyToAccuse) {
+		this.readyToAccuse = readyToAccuse;
+	}
+
 
 }

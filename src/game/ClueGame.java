@@ -271,8 +271,26 @@ public class ClueGame extends JPanel{
 			else {
 				// do computer things
 				ComputerPlayer currentComputer = (ComputerPlayer)currentPlayer;
+		
+				//ready to make accusation?
+				if(currentComputer.getReadyToAccuse()){
+					//check accusation
+				}
+				//move computer player
 				currentComputer.updateLocation(currentComputer.pickLocation(board.getTargets()));
 				// is the player in a room? do suggestion things
+				if(board.getCellAt(currentComputer.getRow(), currentComputer.getColumn()).isDoorway()){
+					Solution s = currentComputer.createSuggestion(playerCards, weaponCards);
+					Card c = handleSuggestion(s.getPerson(), s.getRoom(), s.getWeapon(), currentComputer);
+					if(c == null){
+						currentComputer.setReadyToAccuse(true);
+					}
+					else{
+						currentComputer.getSeenCards().add(c);
+						p.setGuess("Was it " + s.getPerson() + " with the " + s.getWeapon() + " in the " + s.getRoom() + "?");
+						p.setResponse(c.getTitle());
+					}
+				}
 			}
 		}
 		
