@@ -28,6 +28,7 @@ import game.card.Card;
 import game.player.ComputerPlayer;
 import game.player.HumanPlayer;
 import game.player.Player;
+import gui.ControlFrame;
 import gui.panel.DisplayPanel;
 
 public class ClueGame extends JPanel{
@@ -247,9 +248,9 @@ public class ClueGame extends JPanel{
 	}
 	
 	public void nextPlayerPressed(DisplayPanel p) {
-		
+
 		if (!humanMustFinish) {
-		
+
 			if (currentPlayer == null) {
 				currentPlayer = humanPlayer;
 			}
@@ -271,7 +272,7 @@ public class ClueGame extends JPanel{
 			else {
 				// do computer things
 				ComputerPlayer currentComputer = (ComputerPlayer)currentPlayer;
-		
+
 				//ready to make accusation?
 				if(currentComputer.getReadyToAccuse() && currentComputer.getLastGuess() == this.getSolution()){
 					//game over computer player wins
@@ -294,9 +295,9 @@ public class ClueGame extends JPanel{
 				}
 			}
 		}
-		
+
 		repaint();
-		
+
 	}
 	
 	private void rollDice() {
@@ -319,7 +320,10 @@ public class ClueGame extends JPanel{
 					board.clearHighlights();
 					repaint();
 					validClick = true;
-					// Offer to make suggestion
+					//make a suggestion
+					if(board.getCellAt(humanPlayer.getRow(), humanPlayer.getColumn()).isDoorway()){
+						humanPlayer.createGuessDialog();
+					}
 				}
 			}
 			if (!validClick) {

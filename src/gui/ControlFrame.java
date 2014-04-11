@@ -35,7 +35,7 @@ public class ControlFrame extends JFrame {
 	private DisplayPanel displayPanel;
 	private JMenuBar menu;
 	private JButton nextPlayerButton, accusationButton;
-
+	
 	private static final int WINDOW_WIDTH = 800;
 	private static final int WINDOW_HEIGHT = 690;
 
