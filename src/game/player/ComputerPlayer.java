@@ -43,6 +43,7 @@ public class ComputerPlayer extends Player {
 			if (c.isDoorway()) {
 				RoomCell r = (RoomCell)c;
 				if (r.getInitial() != lastRoomVisited) {
+					lastRoomVisited = r.getInitial();
 					return c;
 				}
 			}

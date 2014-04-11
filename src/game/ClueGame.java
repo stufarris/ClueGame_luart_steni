@@ -24,7 +24,9 @@ import javax.swing.border.TitledBorder;
 
 import game.board.Board;
 import game.board.cell.BoardCell;
+import game.board.cell.RoomCell;
 import game.card.Card;
+import game.card.Card.CardType;
 import game.player.ComputerPlayer;
 import game.player.HumanPlayer;
 import game.player.Player;
@@ -63,7 +65,7 @@ public class ClueGame extends JPanel{
 		this.setPreferredSize(new Dimension(BOARD_DIMENSION, BOARD_DIMENSION));
 		this.setSize(new Dimension(BOARD_DIMENSION, BOARD_DIMENSION));
 		this.setBorder(new TitledBorder (new EtchedBorder(), "Game Board"));
-		this.addMouseListener(new HumanMoveListener());
+		this.addMouseListener(new HumanMoveListener(this));
 		
 		cards = new HashSet<Card>();
 		computerPlayers = new ArrayList<ComputerPlayer>();
@@ -154,7 +156,11 @@ public class ClueGame extends JPanel{
 	}
 	
 	public void dealCards() {
+		createSolution();
 		ArrayList<Card> buffer = new ArrayList<Card>(cards);
+		buffer.remove(new Card(solution.getPerson(), CardType.PERSON));
+		buffer.remove(new Card(solution.getWeapon(), CardType.WEAPON));
+		buffer.remove(new Card(solution.getRoom(), CardType.ROOM));
 		Random rand = new Random();
 		while(buffer.size() > 0) {
 			for(ComputerPlayer p : computerPlayers) {
@@ -168,6 +174,18 @@ public class ClueGame extends JPanel{
 			humanPlayer.giveCard(buffer.get(r));
 			buffer.remove(r);
 		}
+	}
+	
+	public void createSolution() {
+		ArrayList<Card> weapons = new ArrayList<Card>(weaponCards);
+		ArrayList<Card> players = new ArrayList<Card>(playerCards);
+		ArrayList<Card> rooms = new ArrayList<Card>(roomCards);
+		setSolution(players.get(new Random().nextInt(players.size())).getTitle(),
+				weapons.get(new Random().nextInt(weapons.size())).getTitle(),
+				rooms.get(new Random().nextInt(rooms.size())).getTitle());
+		System.out.println("Solution person is: " + solution.getPerson());
+		System.out.println("Solution weapon is: " + solution.getWeapon());
+		System.out.println("Solution room is: " + solution.getRoom());
 	}
 	
 	public void setSolution(String person, String weapon, String room) {
@@ -276,6 +294,7 @@ public class ClueGame extends JPanel{
 				//ready to make accusation?
 				if(currentComputer.getReadyToAccuse() && currentComputer.getLastGuess() == this.getSolution()){
 					//game over computer player wins
+					gameWon(currentComputer);
 				}
 				//move computer player
 				currentComputer.updateLocation(currentComputer.pickLocation(board.getTargets()));
@@ -287,7 +306,9 @@ public class ClueGame extends JPanel{
 						currentComputer.setReadyToAccuse(true);
 					}
 					else{
-						//currentComputer.getSeenCards().add(c);
+						for(ComputerPlayer player : computerPlayers){
+							player.seeCard(c);
+						}
 						p.setGuess("Was it " + s.getPerson() + " with the " + s.getWeapon() + " in the " + s.getRoom() + "?");
 						p.setResponse(c.getTitle());
 					}
@@ -306,7 +327,17 @@ public class ClueGame extends JPanel{
 		
 	}
 	
+	private void gameWon(Player p) {
+		JOptionPane.showInternalMessageDialog(null, p.getName() + " has won the game.");
+	}
+	
 	private class HumanMoveListener implements MouseListener {
+		
+		private ClueGame game;
+		
+		public HumanMoveListener(ClueGame game) {
+			this.game = game;
+		}
 
 		@Override
 		public void mouseClicked(MouseEvent event) {
@@ -322,7 +353,7 @@ public class ClueGame extends JPanel{
 					validClick = true;
 					//make a suggestion
 					if(board.getCellAt(humanPlayer.getRow(), humanPlayer.getColumn()).isDoorway()){
-						humanPlayer.createGuessDialog();
+						humanPlayer.createGuessDialog(game);
 					}
 				}
 			}

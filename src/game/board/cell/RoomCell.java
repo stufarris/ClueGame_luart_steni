@@ -18,6 +18,10 @@ public class RoomCell extends BoardCell {
 		UP, DOWN, LEFT, RIGHT, NONE
 	};
 
+	public String getRoomName() {
+		return roomName;
+	}
+
 	public RoomCell(char letter) {
 		this(letter, DoorDirection.NONE);
 	}

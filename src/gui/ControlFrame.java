@@ -37,7 +37,7 @@ public class ControlFrame extends JFrame {
 	private JButton nextPlayerButton, accusationButton;
 	
 	private static final int WINDOW_WIDTH = 800;
-	private static final int WINDOW_HEIGHT = 690;
+	private static final int WINDOW_HEIGHT = 700;
 
 	public ControlFrame() {
 		game = new ClueGame();

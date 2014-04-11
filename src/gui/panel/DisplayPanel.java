@@ -1,9 +1,9 @@
 package gui.panel;
 
-import javax.swing.JLabel;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+
 import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class DisplayPanel extends JPanel{
@@ -14,9 +14,12 @@ public class DisplayPanel extends JPanel{
 	private JTextField rollField, guessField, responseField;
 	
 	public DisplayPanel() {
-		this.add(rollField = new JTextField(rollPrefix));
+		this.setLayout(new GridLayout(2, 1));
+		JPanel rollPanel = new JPanel(new GridLayout(1, 2));
+		rollPanel.add(rollField = new JTextField(rollPrefix));
+		rollPanel.add(responseField = new JTextField(responsePrefix), BorderLayout.EAST);
+		this.add(rollPanel);
 		this.add(guessField = new JTextField(guessPrefix));
-		this.add(responseField = new JTextField(responsePrefix));
 		
 		rollField.setEditable(false);
 		guessField.setEditable(false);

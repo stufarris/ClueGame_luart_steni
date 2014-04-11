@@ -1,6 +1,7 @@
 package game.player;
 
 import game.ClueGame;
+import game.board.Board;
 import game.card.Card;
 import gui.GuessDialog;
 
@@ -20,8 +21,8 @@ public class HumanPlayer extends Player {
 		return true;
 	}
 	
-	public void createGuessDialog(){
-		GuessDialog gui = new GuessDialog();
+	public void createGuessDialog(ClueGame game){
+		GuessDialog gui = new GuessDialog(game, this);
 		gui.setVisible(true);
 		gui.setResizable(false);
 	}
