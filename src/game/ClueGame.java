@@ -2,7 +2,11 @@ package game;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Event;
 import java.awt.Graphics;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.BufferedReader;
@@ -12,13 +16,19 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.EventListener;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
@@ -31,6 +41,7 @@ import game.player.ComputerPlayer;
 import game.player.HumanPlayer;
 import game.player.Player;
 import gui.ControlFrame;
+import gui.GuessDialog;
 import gui.panel.DisplayPanel;
 
 public class ClueGame extends JPanel{
@@ -52,6 +63,8 @@ public class ClueGame extends JPanel{
 	private int dieRoll;
 	private boolean humanMustFinish;
 	
+	private DisplayPanel displayPanel;
+	
 	private static final int BOARD_DIMENSION = 650;
 	private static final int CLICK_Y_OFFSET = 15;
 	
@@ -61,12 +74,13 @@ public class ClueGame extends JPanel{
 	private static final int X_OFFSET = 5;
 	private static final int Y_OFFSET = 15;
 	
-	public ClueGame() {
+	public ClueGame(DisplayPanel p) {
 		this.setPreferredSize(new Dimension(BOARD_DIMENSION, BOARD_DIMENSION));
 		this.setSize(new Dimension(BOARD_DIMENSION, BOARD_DIMENSION));
 		this.setBorder(new TitledBorder (new EtchedBorder(), "Game Board"));
 		this.addMouseListener(new HumanMoveListener(this));
 		
+		displayPanel = p;
 		cards = new HashSet<Card>();
 		computerPlayers = new ArrayList<ComputerPlayer>();
 		players = new ArrayList<Player>();
@@ -265,7 +279,7 @@ public class ClueGame extends JPanel{
 		}
 	}
 	
-	public void nextPlayerPressed(DisplayPanel p) {
+	public void nextPlayerPressed() {
 
 		if (!humanMustFinish) {
 
@@ -280,7 +294,7 @@ public class ClueGame extends JPanel{
 				currentPlayer = players.get(nextIndex);
 			}
 			rollDice();
-			p.setRoll(dieRoll);
+			displayPanel.setRoll(dieRoll);
 			board.startTargets(currentPlayer.getRow(), currentPlayer.getColumn(), dieRoll);
 			if (currentPlayer.isHuman()) {
 				board.highlightTargets();
@@ -303,14 +317,15 @@ public class ClueGame extends JPanel{
 					Solution s = currentComputer.createSuggestion(playerCards, weaponCards);
 					Card c = handleSuggestion(s.getPerson(), s.getRoom(), s.getWeapon(), currentComputer);
 					if(c == null){
+						displayPanel.setResponse("");
 						currentComputer.setReadyToAccuse(true);
 					}
 					else{
 						for(ComputerPlayer player : computerPlayers){
 							player.seeCard(c);
 						}
-						p.setGuess("Was it " + s.getPerson() + " with the " + s.getWeapon() + " in the " + s.getRoom() + "?");
-						p.setResponse(c.getTitle());
+						displayPanel.setGuess("Was it " + s.getPerson() + " with the " + s.getWeapon() + " in the " + s.getRoom() + "?");
+						displayPanel.setResponse(c.getTitle());
 					}
 					currentComputer.setLastGuess(s);
 				}
@@ -329,6 +344,67 @@ public class ClueGame extends JPanel{
 	
 	private void gameWon(Player p) {
 		JOptionPane.showInternalMessageDialog(null, p.getName() + " has won the game.");
+	}
+	
+	private class GuessDialog extends JDialog {
+
+		private JTextField name;
+		private JComboBox<String> personDropdown, weaponDropdown;
+
+		public GuessDialog() {
+			setTitle("Make a guess");
+			setSize(300, 200);
+			this.setLayout(new GridLayout(4,2));
+			
+			JLabel roomLabel = new JLabel("Your Room");
+			JLabel personLabel = new JLabel("Person");
+			JLabel weaponLabel = new JLabel("Weapon");
+			JButton submitButton = new JButton("Submit");
+			submitButton.addActionListener(new SubmitButtonListener());
+			JButton cancelButton = new JButton("Cancel");
+			personDropdown = new JComboBox<String>();
+			for (Card c : getPlayerCards()) {
+				if (c.getTitle() != getHumanPlayer().getName()) {
+					personDropdown.addItem(c.getTitle());
+				}
+			}
+			weaponDropdown = new JComboBox<String>();
+			for (Card c : getWeaponCards()) {
+				weaponDropdown.addItem(c.getTitle());
+			}
+			RoomCell currentCell = (RoomCell)getBoard().getCellAt(humanPlayer.getRow(), humanPlayer.getColumn());
+			JLabel room = new JLabel(getBoard().getRooms().get(currentCell.getInitial()));
+			
+			add(roomLabel);
+			add(room);
+			add(personLabel);
+			add(personDropdown);
+			add(weaponLabel);
+			add(weaponDropdown);
+			add(submitButton);
+			add(cancelButton);
+		}
+		
+		private class SubmitButtonListener implements ActionListener {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				RoomCell r = (RoomCell)board.getCellAt(humanPlayer.getRow(), humanPlayer.getColumn());
+				String roomName = board.getRooms().get(r.getInitial());
+				String weaponName = (String)weaponDropdown.getSelectedItem();
+				String personName = (String)personDropdown.getSelectedItem();
+				Card c = handleSuggestion(personName, roomName, weaponName, humanPlayer);
+				displayPanel.setGuess("Was it " + personName + " with the " + weaponName + " in the " + roomName + "?");
+				if (c != null) {
+					displayPanel.setResponse(c.getTitle());
+				} else {
+					displayPanel.setResponse("");
+				}
+				setVisible(false);
+				dispose();
+			}
+		}
+		
+
 	}
 	
 	private class HumanMoveListener implements MouseListener {
@@ -353,7 +429,9 @@ public class ClueGame extends JPanel{
 					validClick = true;
 					//make a suggestion
 					if(board.getCellAt(humanPlayer.getRow(), humanPlayer.getColumn()).isDoorway()){
-						humanPlayer.createGuessDialog(game);
+						GuessDialog gDiag = new GuessDialog();
+						gDiag.setVisible(true);
+						gDiag.setResizable(false);
 					}
 				}
 			}

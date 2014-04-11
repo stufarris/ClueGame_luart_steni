@@ -38,9 +38,7 @@ public class GuessDialog extends JDialog{
 		JButton cancelButton = new JButton("Cancel");
 		personDropdown = new JComboBox<String>();
 		for (Card c : game.getPlayerCards()) {
-			if (c.getTitle() != game.getHumanPlayer().getName()) {
-				personDropdown.addItem(c.getTitle());
-			}
+			personDropdown.addItem(c.getTitle());
 		}
 		weaponDropdown = new JComboBox<String>();
 		for (Card c : game.getWeaponCards()) {
@@ -58,7 +56,6 @@ public class GuessDialog extends JDialog{
 		add(submitButton);
 		add(cancelButton);
 	}
-	
 	
 
 }

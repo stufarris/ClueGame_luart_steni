@@ -40,7 +40,9 @@ public class ControlFrame extends JFrame {
 	private static final int WINDOW_HEIGHT = 700;
 
 	public ControlFrame() {
-		game = new ClueGame();
+		displayPanel = new DisplayPanel();
+		
+		game = new ClueGame(displayPanel);
 		game.loadConfigFiles("data/card/weapon/weapons.txt", "data/Players.txt");
 		game.getPlayers();
 		game.dealCards();
@@ -60,7 +62,6 @@ public class ControlFrame extends JFrame {
 		
 		createCardsPanel();
 		
-		displayPanel = new DisplayPanel();
 		
 		this.add(displayPanel, BorderLayout.SOUTH);
 		this.add(uiPanel, BorderLayout.NORTH);
@@ -101,7 +102,7 @@ public class ControlFrame extends JFrame {
 	private class nextPlayerListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			game.nextPlayerPressed(displayPanel);
+			game.nextPlayerPressed();
 			turnPanel.updateTurn(game.getCurrentPlayer());
 		}
 	}

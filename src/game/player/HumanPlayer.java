@@ -20,11 +20,5 @@ public class HumanPlayer extends Player {
 	public boolean isHuman() {
 		return true;
 	}
-	
-	public void createGuessDialog(ClueGame game){
-		GuessDialog gui = new GuessDialog(game, this);
-		gui.setVisible(true);
-		gui.setResizable(false);
-	}
 
 }
