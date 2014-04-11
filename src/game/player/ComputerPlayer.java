@@ -22,7 +22,16 @@ public class ComputerPlayer extends Player {
 	private ClueGame game;
 	
 	private Boolean readyToAccuse;
+	private Solution lastGuess;
 	
+	public Solution getLastGuess() {
+		return lastGuess;
+	}
+
+	public void setLastGuess(Solution lastGuess) {
+		this.lastGuess = lastGuess;
+	}
+
 	public ComputerPlayer(String id, Color color, int row, int column, ClueGame game) {
 		super(id, color, row, column);
 		this.game = game;

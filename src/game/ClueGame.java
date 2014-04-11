@@ -273,8 +273,8 @@ public class ClueGame extends JPanel{
 				ComputerPlayer currentComputer = (ComputerPlayer)currentPlayer;
 		
 				//ready to make accusation?
-				if(currentComputer.getReadyToAccuse()){
-					//check accusation
+				if(currentComputer.getReadyToAccuse() && currentComputer.getLastGuess() == this.getSolution()){
+					//game over computer player wins
 				}
 				//move computer player
 				currentComputer.updateLocation(currentComputer.pickLocation(board.getTargets()));
@@ -286,10 +286,11 @@ public class ClueGame extends JPanel{
 						currentComputer.setReadyToAccuse(true);
 					}
 					else{
-						currentComputer.getSeenCards().add(c);
+						//currentComputer.getSeenCards().add(c);
 						p.setGuess("Was it " + s.getPerson() + " with the " + s.getWeapon() + " in the " + s.getRoom() + "?");
 						p.setResponse(c.getTitle());
 					}
+					currentComputer.setLastGuess(s);
 				}
 			}
 		}
