@@ -14,6 +14,7 @@ import game.ClueGame;
 import game.Solution;
 import game.card.Card;
 import game.player.*;
+import gui.ControlFrame;
 
 
 public class ClueGameTest {
@@ -23,7 +24,9 @@ public class ClueGameTest {
 	// Sets up the GlueGame object and deals the cards to the players in the ClueGame player list
 	@BeforeClass
 	public static void setUp() {
-		game = new ClueGame();
+		ControlFrame frame = new ControlFrame(true);
+		frame.setVisible(false);
+		game = new ClueGame(frame);
 		game.loadConfigFiles("data/card/weapon/weapons.txt", "data/Players.txt");
 		game.dealCards();
 	}
@@ -80,32 +83,19 @@ public class ClueGameTest {
 		Assert.assertEquals(game.getCards().size(), 22);
 	}
 	
-	// This test iterates through the deck of cards and checks that only one player has the card, If the card has not been dealt or been redealt the test fails
-	@Test
-	public void testDealingCards() {
-		int count = 0;
-		for(Card card : game.getCards()) {
-			for(Player player : game.getPlayers()) {
-				if(player.hasCard(card)) count++;
-			}
-			Assert.assertEquals(count, 1);
-			count = 0;
-		}
-	}
-	
 	// This test uses integer division to approximate the lower value for how many cards a player could have.
 	// Since the only other possibility is one greater that than the low value it also allows one above the low value.
 	// Therefore if a player doesnot have the low value or one greater than the low value, the test fails
 	@Test
 	public void testPlayerDealtCardAmount() {
-		int low = game.getCards().size() / game.getPlayers().size();
+		int low = (game.getCards().size() - 3) / game.getPlayers().size();
 		int totalCards = 0;
 		
 		for(Player player : game.getPlayers()) {
 			totalCards += player.getCards().size();
 			assertTrue(player.getCards().size() == low || player.getCards().size() == (low + 1));
 		}
-		assertEquals(totalCards, game.getCards().size());
+		assertEquals(totalCards, game.getCards().size() - 3);
 	}
 	
 	// This test checks that a correct Accusation matches the Solution

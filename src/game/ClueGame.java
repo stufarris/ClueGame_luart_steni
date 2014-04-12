@@ -2,7 +2,6 @@ package game;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Event;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -16,7 +15,6 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.EventListener;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Scanner;
@@ -41,7 +39,6 @@ import game.player.ComputerPlayer;
 import game.player.HumanPlayer;
 import game.player.Player;
 import gui.ControlFrame;
-import gui.GuessDialog;
 import gui.panel.DisplayPanel;
 
 public class ClueGame extends JPanel{
@@ -59,6 +56,7 @@ public class ClueGame extends JPanel{
 	
 	private Solution solution;
 	private Board board;
+	private ControlFrame controlFrame;
 	
 	private int dieRoll;
 	private boolean humanMustFinish;
@@ -74,13 +72,14 @@ public class ClueGame extends JPanel{
 	private static final int X_OFFSET = 5;
 	private static final int Y_OFFSET = 15;
 	
-	public ClueGame(DisplayPanel p) {
+	public ClueGame(ControlFrame f) {
 		this.setPreferredSize(new Dimension(BOARD_DIMENSION, BOARD_DIMENSION));
 		this.setSize(new Dimension(BOARD_DIMENSION, BOARD_DIMENSION));
 		this.setBorder(new TitledBorder (new EtchedBorder(), "Game Board"));
 		this.addMouseListener(new HumanMoveListener(this));
 		
-		displayPanel = p;
+		controlFrame = f;
+		displayPanel = f.getDisplayPanel();
 		cards = new HashSet<Card>();
 		computerPlayers = new ArrayList<ComputerPlayer>();
 		players = new ArrayList<Player>();
@@ -207,6 +206,12 @@ public class ClueGame extends JPanel{
 	}
 	
 	public Card handleSuggestion(String person, String room, String weapon, Player accusingPerson) {
+		for (Player p : getPlayers()) {
+			if (p.getName().equals(person)) {
+				p.updateLocation(board.getCellAt(accusingPerson.getRow(), accusingPerson.getColumn()));
+				repaint();
+			}
+		}
 		Card c = null;
 		ArrayList<Player> players = this.getPlayers();
 		int accuserIndex = players.indexOf(accusingPerson);
@@ -297,6 +302,7 @@ public class ClueGame extends JPanel{
 			displayPanel.setRoll(dieRoll);
 			board.startTargets(currentPlayer.getRow(), currentPlayer.getColumn(), dieRoll);
 			if (currentPlayer.isHuman()) {
+				controlFrame.enableAccusationButton();
 				board.highlightTargets();
 				humanMustFinish = true;
 				repaint();
@@ -308,6 +314,8 @@ public class ClueGame extends JPanel{
 				//ready to make accusation?
 				if(currentComputer.getReadyToAccuse() && currentComputer.getLastGuess() == this.getSolution()){
 					//game over computer player wins
+					JOptionPane.showMessageDialog(null, "Computer accusation (" + currentComputer.getLastGuess().getPerson() + ", " + 
+							currentComputer.getLastGuess().getWeapon() + ", " + currentComputer.getLastGuess().getRoom() + ") was correct.");
 					gameWon(currentComputer);
 				}
 				//move computer player
@@ -317,7 +325,7 @@ public class ClueGame extends JPanel{
 					Solution s = currentComputer.createSuggestion(playerCards, weaponCards);
 					Card c = handleSuggestion(s.getPerson(), s.getRoom(), s.getWeapon(), currentComputer);
 					if(c == null){
-						displayPanel.setResponse("");
+						displayPanel.setResponse("No new clue");
 						currentComputer.setReadyToAccuse(true);
 					}
 					else{
@@ -343,40 +351,58 @@ public class ClueGame extends JPanel{
 	}
 	
 	private void gameWon(Player p) {
-		JOptionPane.showInternalMessageDialog(null, p.getName() + " has won the game.");
+		JOptionPane.showMessageDialog(null, p.getName() + " has won the game.");
+		setVisible(false);
+		controlFrame.setVisible(false);
+		controlFrame.dispose();
 	}
 	
 	private class GuessDialog extends JDialog {
 
 		private JTextField name;
-		private JComboBox<String> personDropdown, weaponDropdown;
+		private JComboBox<String> personDropdown, weaponDropdown, roomDropdown;
 
-		public GuessDialog() {
-			setTitle("Make a guess");
+		public GuessDialog(boolean isAccusation) {
+			if (isAccusation) setTitle("Make an accusation");
+			else setTitle("Make a guess");
 			setSize(300, 200);
+			this.setLocationRelativeTo(null);
 			this.setLayout(new GridLayout(4,2));
-			
-			JLabel roomLabel = new JLabel("Your Room");
+			this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+			JLabel roomLabel;
+			if (isAccusation) roomLabel = new JLabel("Room");
+			else roomLabel = new JLabel("Your room");
 			JLabel personLabel = new JLabel("Person");
 			JLabel weaponLabel = new JLabel("Weapon");
 			JButton submitButton = new JButton("Submit");
-			submitButton.addActionListener(new SubmitButtonListener());
+			if (isAccusation) submitButton.addActionListener(new SubmitAccusationListener());
+			else submitButton.addActionListener(new SubmitSuggestionListener());
 			JButton cancelButton = new JButton("Cancel");
+			cancelButton.addActionListener(new CancelButtonListener());
 			personDropdown = new JComboBox<String>();
 			for (Card c : getPlayerCards()) {
-				if (c.getTitle() != getHumanPlayer().getName()) {
-					personDropdown.addItem(c.getTitle());
-				}
+				personDropdown.addItem(c.getTitle());
 			}
 			weaponDropdown = new JComboBox<String>();
 			for (Card c : getWeaponCards()) {
 				weaponDropdown.addItem(c.getTitle());
 			}
-			RoomCell currentCell = (RoomCell)getBoard().getCellAt(humanPlayer.getRow(), humanPlayer.getColumn());
-			JLabel room = new JLabel(getBoard().getRooms().get(currentCell.getInitial()));
+			
+			JLabel room = null;
+			
+			if (isAccusation) {
+				roomDropdown = new JComboBox<String>();
+				for (Card c : getRoomCards()) {
+					if (!c.getTitle().equalsIgnoreCase("walkway") && !c.getTitle().equalsIgnoreCase("closet")) roomDropdown.addItem(c.getTitle());
+				}
+			} else {
+				RoomCell currentCell = (RoomCell)getBoard().getCellAt(humanPlayer.getRow(), humanPlayer.getColumn());
+				room = new JLabel(getBoard().getRooms().get(currentCell.getInitial()));
+			}
 			
 			add(roomLabel);
-			add(room);
+			if (isAccusation) add(roomDropdown);
+			else add(room);
 			add(personLabel);
 			add(personDropdown);
 			add(weaponLabel);
@@ -385,7 +411,7 @@ public class ClueGame extends JPanel{
 			add(cancelButton);
 		}
 		
-		private class SubmitButtonListener implements ActionListener {
+		private class SubmitSuggestionListener implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				RoomCell r = (RoomCell)board.getCellAt(humanPlayer.getRow(), humanPlayer.getColumn());
@@ -397,8 +423,41 @@ public class ClueGame extends JPanel{
 				if (c != null) {
 					displayPanel.setResponse(c.getTitle());
 				} else {
-					displayPanel.setResponse("");
+					displayPanel.setResponse("No new clue");
 				}
+				controlFrame.enablePlayerButton();
+				setVisible(false);
+				dispose();
+			}
+		}
+		
+		private class SubmitAccusationListener implements ActionListener {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				String weaponName = (String)weaponDropdown.getSelectedItem();
+				String personName = (String)personDropdown.getSelectedItem();
+				String roomName = (String)roomDropdown.getSelectedItem();
+				Solution accusation = new Solution(personName, weaponName, roomName);
+				if(checkAccusation(accusation)){
+					//game over computer player wins
+					gameWon(humanPlayer);
+				} else {
+					JOptionPane.showMessageDialog(null, "Your accusation was incorrect.");
+					humanMustFinish = false;
+					controlFrame.disableAccusationButton();
+					board.clearHighlights();
+					repaintHelper();
+				}
+				controlFrame.enablePlayerButton();
+				setVisible(false);
+				dispose();
+			}
+		}
+		
+		private class CancelButtonListener implements ActionListener {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				controlFrame.enablePlayerButton();
 				setVisible(false);
 				dispose();
 			}
@@ -417,26 +476,30 @@ public class ClueGame extends JPanel{
 
 		@Override
 		public void mouseClicked(MouseEvent event) {
-			int clickX = event.getX();
-			int clickY = event.getY() - CLICK_Y_OFFSET;
-			boolean validClick = false;
-			for (BoardCell b : board.getTargets()) {
-				if (b.isClicked(clickX, clickY)) {
-					currentPlayer.updateLocation(b);
-					humanMustFinish = false;
-					board.clearHighlights();
-					repaint();
-					validClick = true;
-					//make a suggestion
-					if(board.getCellAt(humanPlayer.getRow(), humanPlayer.getColumn()).isDoorway()){
-						GuessDialog gDiag = new GuessDialog();
-						gDiag.setVisible(true);
-						gDiag.setResizable(false);
+			if (humanMustFinish) {
+				int clickX = event.getX();
+				int clickY = event.getY() - CLICK_Y_OFFSET;
+				boolean validClick = false;
+				for (BoardCell b : board.getTargets()) {
+					if (b.isClicked(clickX, clickY)) {
+						currentPlayer.updateLocation(b);
+						humanMustFinish = false;
+						controlFrame.disableAccusationButton();
+						board.clearHighlights();
+						repaint();
+						validClick = true;
+						//make a suggestion
+						if(board.getCellAt(humanPlayer.getRow(), humanPlayer.getColumn()).isDoorway()){
+							controlFrame.disableButtons();
+							GuessDialog gDiag = new GuessDialog(false);
+							gDiag.setVisible(true);
+							gDiag.setResizable(false);
+						}
 					}
 				}
-			}
-			if (!validClick) {
-				JOptionPane.showMessageDialog(null, "Invalid location clicked!");
+				if (!validClick) {
+					JOptionPane.showMessageDialog(null, "Invalid location clicked!");
+				}
 			}
 		}
 
@@ -455,6 +518,16 @@ public class ClueGame extends JPanel{
 		@Override
 		public void mouseReleased(MouseEvent arg0) {
 		}
+	}
+	
+	public void launchAccusationWindow() {
+		GuessDialog accDiag = new GuessDialog(true);
+		accDiag.setVisible(true);
+		accDiag.setResizable(false);
+	}
+	
+	public void repaintHelper() {
+		repaint();
 	}
 		
 }

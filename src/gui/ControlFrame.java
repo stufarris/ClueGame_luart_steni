@@ -2,6 +2,7 @@ package gui;
 
 
 import game.ClueGame;
+import game.board.cell.RoomCell;
 import game.card.Card;
 import gui.panel.DisplayPanel;
 import gui.panel.TurnPanel;
@@ -35,14 +36,15 @@ public class ControlFrame extends JFrame {
 	private DisplayPanel displayPanel;
 	private JMenuBar menu;
 	private JButton nextPlayerButton, accusationButton;
-	
+
+
 	private static final int WINDOW_WIDTH = 800;
 	private static final int WINDOW_HEIGHT = 700;
 
-	public ControlFrame() {
+	public ControlFrame(boolean testEnabled) {
 		displayPanel = new DisplayPanel();
 		
-		game = new ClueGame(displayPanel);
+		game = new ClueGame(this);
 		game.loadConfigFiles("data/card/weapon/weapons.txt", "data/Players.txt");
 		game.getPlayers();
 		game.dealCards();
@@ -50,6 +52,7 @@ public class ControlFrame extends JFrame {
 		this.setTitle("The Game of Clue");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout(new BorderLayout());
+		this.setLocationRelativeTo(null);
 		
 		createActionPanel();
 
@@ -72,7 +75,7 @@ public class ControlFrame extends JFrame {
 		menu.add(createFileMenu());
 		
 		//splash screen
-		JOptionPane.showMessageDialog(null, "You are " + game.getHumanPlayer().getName() + ", press Next Player to begin play!");
+		if (!testEnabled) JOptionPane.showMessageDialog(null, "You are " + game.getHumanPlayer().getName() + ", press Next Player to begin play!");
 
 	}
 
@@ -93,13 +96,15 @@ public class ControlFrame extends JFrame {
 		actionPanel = new JPanel();
 		actionPanel.setLayout(new GridLayout(1,2));
 		nextPlayerButton = new JButton("Next Player");
-		nextPlayerButton.addActionListener(new nextPlayerListener());
+		nextPlayerButton.addActionListener(new NextPlayerListener());
 		accusationButton = new JButton("Make an Accusation");
+		accusationButton.addActionListener(new AccusationButtonListener());
+		disableAccusationButton();
 		actionPanel.add(nextPlayerButton);
 		actionPanel.add(accusationButton);
 	}
 	
-	private class nextPlayerListener implements ActionListener {
+	private class NextPlayerListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			game.nextPlayerPressed();
@@ -144,11 +149,45 @@ public class ControlFrame extends JFrame {
 		
 	}
 	
+	private class AccusationButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			game.launchAccusationWindow();
+		}
+	}
+	
 	public static void main(String[] args) {
-		ControlFrame gui = new ControlFrame();
+		ControlFrame gui = new ControlFrame(false);
 		gui.setVisible(true);
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gui.setVisible(true);
 		gui.setResizable(false);
 	}
+	
+	public void disableButtons() {
+		nextPlayerButton.setEnabled(false);
+		accusationButton.setEnabled(false);
+	}
+	
+	public void disableAccusationButton() {
+		accusationButton.setEnabled(false);
+	}
+	
+	public void enableButtons() {
+		nextPlayerButton.setEnabled(true);
+		accusationButton.setEnabled(true);
+	}
+	
+	public void enableAccusationButton() {
+		accusationButton.setEnabled(true);
+	}
+	
+	public void enablePlayerButton() {
+		nextPlayerButton.setEnabled(true);
+	}
+	
+	public DisplayPanel getDisplayPanel() {
+		return displayPanel;
+	}
 }
+

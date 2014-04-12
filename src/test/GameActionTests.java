@@ -15,6 +15,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import game.Solution;
+import gui.ControlFrame;
 
 public class GameActionTests {
 	
@@ -23,7 +24,8 @@ public class GameActionTests {
 
 	@BeforeClass
 	public static void setUp() {
-		game = new ClueGame();
+		ControlFrame frame = new ControlFrame(true);
+		game = new ClueGame(frame);
 		game.loadConfigFiles("data/card/weapon/weapons.txt", "data/Players.txt");
 		game.dealCards();
 		game.getBoard().calcAdjacencies();
