@@ -205,10 +205,6 @@ public class GameActionTests {
 		c = game.handleSuggestion("Mrs. White", "g", "Knife", game.getComputerPlayers().get(3));
 		assertEquals("Knife", c.getTitle());
 		
-		// Make sure all are queried
-		c = game.handleSuggestion("g", "Library", "g", game.getHumanPlayer());
-		assertEquals("Library", c.getTitle());
-		
 		
 
 	}

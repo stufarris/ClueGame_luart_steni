@@ -36,7 +36,7 @@ public class Player {
 		if(handOfCards.contains(r)) buffer.add(r);
 		if(handOfCards.contains(w)) buffer.add(w);
 		if (buffer.size() > 0) return buffer.get(new Random().nextInt(buffer.size()));
-		return null;
+		else return null;
 	}
 	
 	public void forgetCard(Card c) {

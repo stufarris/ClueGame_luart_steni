@@ -44,7 +44,7 @@ public class Board {
 
 	public Board() {
 		// default uses CR board and legend
-		this("ClueLayout.csv", "ClueLegend.txt");
+		this("PK_ClueLayout.csv", "PK_ClueLegend.txt");
 	}
 
 	public Board(String csv, String legend) {

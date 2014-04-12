@@ -1,6 +1,6 @@
 H,H,H,H,H,H,W,W,W,W,C,C,C,C,C,C,C,C,C,C,C,W,W,S,S,S
-H,H,H,H,H,H,W,W,W,W,C,C,C,C,C,C,C,C,C,C,C,W,W,S,S,S
-H,H,H,H,H,H,W,W,W,W,C,C,C,C,C,C,C,C,C,C,C,W,W,S,SD,S
+H,H,H,H,H,H,W,W,W,W,C,C,CN,C,C,C,C,C,C,C,C,W,W,SN,S,S
+H,H,HN,H,H,H,W,W,W,W,C,C,C,C,C,C,C,C,C,C,C,W,W,S,SD,S
 H,H,H,H,H,H,W,W,W,W,C,C,C,C,C,C,C,C,C,C,C,W,W,W,W,W
 H,H,H,H,H,H,W,W,W,W,W,W,W,W,CL,C,CR,W,W,W,W,W,W,W,W,W
 H,H,H,H,HD,H,W,W,W,W,W,W,W,W,C,C,C,W,W,W,W,W,W,W,W,W
@@ -8,10 +8,10 @@ W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W
 W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W
 W,W,L,LU,L,L,L,L,W,W,W,X,X,X,X,X,X,X,W,W,W,W,D,D,DU,D
 W,W,L,L,L,L,L,L,W,W,W,X,X,X,X,X,X,X,W,W,W,W,D,D,D,D
-W,W,L,L,L,W,W,W,W,W,W,X,X,X,X,X,X,X,W,W,W,W,D,D,D,D
+W,W,L,L,L,W,W,W,W,W,W,X,X,XN,X,X,X,X,W,W,W,W,D,D,D,D
 W,W,L,L,L,W,W,W,W,W,W,X,X,X,X,X,X,X,W,W,W,W,D,D,D,D
 W,W,L,L,L,L,L,L,W,W,W,X,X,X,X,X,X,X,W,W,W,W,D,D,D,D
-W,W,L,L,L,L,L,LR,W,W,W,W,W,W,W,W,W,W,W,W,W,W,D,D,D,D
+W,W,L,LN,L,L,L,LR,W,W,W,W,W,W,W,W,W,W,W,W,W,W,D,DN,D,D
 W,W,L,L,L,L,L,L,W,W,W,W,W,W,W,W,W,W,W,W,W,D,D,D,D,D
 W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,D,D,D,D,D
 W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,D,D,D,D,D
@@ -19,8 +19,8 @@ B,B,BU,B,B,W,W,W,W,W,W,W,W,W,W,RU,R,R,W,W,W,D,D,D,D,D
 B,B,B,B,B,W,W,W,W,W,W,W,W,W,W,R,R,R,W,W,W,D,DR,W,W,W
 B,B,B,B,B,W,O,O,O,O,O,O,O,W,W,R,R,R,W,W,W,D,D,W,W,W
 B,B,B,B,B,W,O,O,O,O,O,O,O,W,W,R,R,R,W,W,W,D,D,W,W,W
-B,B,B,B,B,W,O,O,O,O,O,O,O,W,R,R,R,RR,W,W,W,W,W,W,K,K
-B,B,B,B,B,W,OL,O,O,O,O,O,O,W,R,R,R,R,W,W,W,W,W,W,KL,K
+B,BN,B,B,B,W,O,O,ON,O,O,O,O,W,R,R,R,RR,W,W,W,W,W,W,K,K
+B,B,B,B,B,W,OL,O,O,O,O,O,O,W,RN,R,R,R,W,W,W,W,W,W,KL,K
 B,B,B,B,B,W,O,O,O,O,O,O,OD,W,R,R,R,R,W,W,K,K,K,K,K,K
-B,B,B,B,B,W,W,W,W,W,W,W,W,W,W,W,W,R,W,W,KL,K,K,K,K,K
-B,B,B,B,BL,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,K,K,K,K,K,K
+B,B,B,B,B,W,W,W,W,W,W,W,W,W,W,W,W,R,W,W,KL,KN,K,K,K,K
+B,B,B,B,BR,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,K,K,K,K,K,K

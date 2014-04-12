@@ -94,7 +94,7 @@ public class ClueGame extends JPanel{
 	}
 
 	public void loadConfigFiles(String weaponFilename, String playerFilename) {
-		board = new Board("data/board/ClueLayout.csv", "data/board/ClueLegend.txt");
+		board = new Board("data/board/PK_ClueLayout.csv", "data/board/PK_ClueLegend.txt");
 		board.loadConfigFiles();
 		try {
 			loadRoomsFromBoard();
@@ -196,9 +196,6 @@ public class ClueGame extends JPanel{
 		setSolution(players.get(new Random().nextInt(players.size())).getTitle(),
 				weapons.get(new Random().nextInt(weapons.size())).getTitle(),
 				rooms.get(new Random().nextInt(rooms.size())).getTitle());
-		System.out.println("Solution person is: " + solution.getPerson());
-		System.out.println("Solution weapon is: " + solution.getWeapon());
-		System.out.println("Solution room is: " + solution.getRoom());
 	}
 	
 	public void setSolution(String person, String weapon, String room) {
@@ -353,6 +350,10 @@ public class ClueGame extends JPanel{
 	private void gameWon(Player p) {
 		JOptionPane.showMessageDialog(null, p.getName() + " has won the game.");
 		setVisible(false);
+		if (controlFrame.getNotesDiag() != null){
+			controlFrame.getNotesDiag().setVisible(false);
+			controlFrame.getNotesDiag().dispose();
+		}
 		controlFrame.setVisible(false);
 		controlFrame.dispose();
 	}

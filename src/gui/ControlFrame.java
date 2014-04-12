@@ -36,10 +36,11 @@ public class ControlFrame extends JFrame {
 	private DisplayPanel displayPanel;
 	private JMenuBar menu;
 	private JButton nextPlayerButton, accusationButton;
+	private NotesDialog notesDiag;
 
 
 	private static final int WINDOW_WIDTH = 800;
-	private static final int WINDOW_HEIGHT = 700;
+	private static final int WINDOW_HEIGHT = 815;
 
 	public ControlFrame(boolean testEnabled) {
 		displayPanel = new DisplayPanel();
@@ -126,10 +127,10 @@ public class ControlFrame extends JFrame {
 		class MenuItemListener implements ActionListener {
 			public void actionPerformed(ActionEvent e)
 			{
-				NotesDialog gui = new NotesDialog(game);
-				gui.setVisible(true);
-				gui.setVisible(true);
-				gui.setResizable(false);
+				notesDiag = new NotesDialog(game);
+				notesDiag.setVisible(true);
+				notesDiag.setVisible(true);
+				notesDiag.setResizable(false);
 			}
 		}
 		item.addActionListener(new MenuItemListener());
@@ -188,6 +189,10 @@ public class ControlFrame extends JFrame {
 	
 	public DisplayPanel getDisplayPanel() {
 		return displayPanel;
+	}
+
+	public NotesDialog getNotesDiag() {
+		return notesDiag;
 	}
 }
 
